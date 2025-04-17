@@ -1,0 +1,1294 @@
+# Дорогушина Анастасия Александровна, гр.3385
+# Лабораторная работа №1: Файловые системы
+# Основные сведения
+
+nastnest@bubunta:~$ date
+Пн 14 апр 2025 22:49:22 MSK
+
+nastnest@bubunta:~$ who
+nastnest seat0        2025-04-14 00:35 (login screen)
+nastnest tty2         2025-04-14 00:35 (tty2)
+
+nastnest@bubunta:~$ lscpu
+Архитектура:                          x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Порядок байт:                         Little Endian
+CPU(s):                               2
+On-line CPU(s) list:                  0,1
+ID прроизводителя:                    AuthenticAMD
+Имя модели:                           AMD Ryzen 5 4500U with Radeon Graphics
+Семейство ЦПУ:                        23
+Модель:                               96
+Потоков на ядро:                      1
+Ядер на сокет:                        2
+Сокетов:                              1
+Степпинг:                             1
+BogoMIPS:                             4740,92
+Флаги:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+Разработчик гипервизора:              KVM
+Тип виртуализации:                    полный
+L1d cache:                            64 KiB (2 instances)
+L1i cache:                            64 KiB (2 instances)
+L2 cache:                             1 MiB (2 instances)
+L3 cache:                             16 MiB (2 instances)
+NUMA node(s):                         1
+NUMA node0 CPU(s):                    0,1
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Mitigation; untrained return thunk; SMT disabled
+Vulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:      Not affected
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+nastnest@bubunta:~$ uname -a
+Linux bubunta 6.11.0-19-generic #19~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 17 11:51:52 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+nastnest@bubunta:~$ sudo lshw
+bubunta
+    описание: Project-Id-Version: lshwReport-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>PO-Revision-Date: 2015-01-21 09:55+0000Last-Translator: Aleksey Kabanov <Unknown>Language-Team: Russian <ru@li.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-Encoding: 8bitX-Launchpad-Export-Date: 2025-01-30 17:14+0000X-Generator: Launchpad (build b13dacce4a364151a813e3cdd6940bbff676214a)Language: ru_RU
+    продукт: VirtualBox
+    производитель: innotek GmbH
+    версия: 1.2
+    серийный №: VirtualBox-cd861f95-8b9a-4eb4-b449-c7b372a9295e
+    разрядность: 64 bits
+    возможности: smbios-2.5 dmi-2.5 smp vsyscall32
+    конфигурация: family=Virtual Machine uuid=cd861f95-8b9a-4eb4-b449-c7b372a9295e
+  *-core
+       описание: Материнская плата
+       продукт: VirtualBox
+       производитель: Oracle Corporation
+       физический ID: 0
+       версия: 1.2
+       серийный №: 0
+     *-firmware
+          описание: BIOS
+          производитель: innotek GmbH
+          физический ID: 0
+          версия: VirtualBox
+          date: 12/01/2006
+          размер: 128KiB
+          capacity: 128KiB
+          возможности: isa pci cdboot bootselect int9keyboard int10video acpi
+     *-memory
+          описание: Системная память
+          физический ID: 1
+          размер: 3GiB
+     *-cpu
+          продукт: AMD Ryzen 5 4500U with Radeon Graphics
+          производитель: Advanced Micro Devices [AMD]
+          физический ID: 2
+          сведения о шине: cpu@0
+          версия: 23.96.1
+          разрядность: 64 bits
+          возможности: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp x86-64 constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+          конфигурация: microcode=4294967295
+     *-pci
+          описание: Host bridge
+          продукт: 440FX - 82441FX PMC [Natoma]
+          производитель: Intel Corporation
+          физический ID: 100
+          сведения о шине: pci@0000:00:00.0
+          версия: 02
+          разрядность: 32 bits
+          частота: 33MHz
+        *-isa
+             описание: ISA bridge
+             продукт: 82371SB PIIX3 ISA [Natoma/Triton II]
+             производитель: Intel Corporation
+             физический ID: 1
+             сведения о шине: pci@0000:00:01.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: isa bus_master
+             конфигурация: latency=0
+           *-pnp00:00
+                продукт: PnP device PNP0303
+                физический ID: 0
+                возможности: pnp
+                конфигурация: driver=i8042 kbd
+           *-pnp00:01
+                продукт: PnP device PNP0f03
+                физический ID: 1
+                возможности: pnp
+                конфигурация: driver=i8042 aux
+        *-ide
+             описание: IDE interface
+             продукт: 82371AB/EB/MB PIIX4 IDE
+             производитель: Intel Corporation
+             физический ID: 1.1
+             сведения о шине: pci@0000:00:01.1
+             логическое имя: scsi1
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ide isa_compat_mode pci_native_mode bus_master emulated
+             конфигурация: driver=ata_piix latency=64
+             ресурсы: IRQ:0 ioport:1f0(размер=8) ioport:3f6 ioport:170(размер=8) ioport:376 ioport:d000(размер=16)
+           *-cdrom
+                описание: DVD reader
+                продукт: CD-ROM
+                производитель: VBOX
+                физический ID: 0.0.0
+                сведения о шине: scsi@1:0.0.0
+                логическое имя: /dev/cdrom
+                логическое имя: /dev/sr0
+                логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                версия: 1.0
+                возможности: removable audio dvd
+                конфигурация: ansiversion=5 mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted status=ready
+              *-medium
+                   физический ID: 0
+                   логическое имя: /dev/cdrom
+                   логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                   конфигурация: mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted
+        *-display
+             описание: VGA compatible controller
+             продукт: SVGA II Adapter
+             производитель: VMware
+             физический ID: 2
+             сведения о шине: pci@0000:00:02.0
+             логическое имя: /dev/fb0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: vga_controller bus_master rom fb
+             конфигурация: depth=32 driver=vmwgfx latency=64 resolution=1280,800
+             ресурсы: IRQ:18 ioport:d010(размер=16) память:e0000000-e0ffffff память:f0000000-f01fffff память:c0000-dffff
+        *-network
+             описание: Ethernet interface
+             продукт: 82540EM Gigabit Ethernet Controller
+             производитель: Intel Corporation
+             физический ID: 3
+             сведения о шине: pci@0000:00:03.0
+             логическое имя: enp0s3
+             версия: 02
+             серийный №: 08:00:27:7e:5c:9b
+             размер: 1Gbit/s
+             capacity: 1Gbit/s
+             разрядность: 32 bits
+             частота: 66MHz
+             возможности: pm pcix bus_master cap_list ethernet physical tp 10bt 10bt-fd 100bt 100bt-fd 1000bt-fd autonegotiation
+             конфигурация: autonegotiation=on broadcast=yes driver=e1000 driverversion=6.11.0-19-generic duplex=full ip=10.0.2.15 latency=64 link=yes mingnt=255 multicast=yes port=twisted pair speed=1Gbit/s
+             ресурсы: IRQ:19 память:f0200000-f021ffff ioport:d020(размер=8)
+        *-generic
+             описание: System peripheral
+             продукт: VirtualBox mouse integration
+             производитель: InnoTek Systemberatung GmbH
+             физический ID: 4
+             сведения о шине: pci@0000:00:04.0
+             логическое имя: input7
+             логическое имя: /dev/input/event6
+             логическое имя: /dev/input/js1
+             логическое имя: /dev/input/mouse2
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: pci
+             конфигурация: driver=vboxguest latency=0
+             ресурсы: IRQ:20 ioport:d040(размер=32) память:f0400000-f07fffff память:f0800000-f0803fff
+        *-multimedia
+             описание: Multimedia audio controller
+             продукт: 82801AA AC'97 Audio Controller
+             производитель: Intel Corporation
+             физический ID: 5
+             сведения о шине: pci@0000:00:05.0
+             логическое имя: card0
+             логическое имя: /dev/snd/controlC0
+             логическое имя: /dev/snd/pcmC0D0c
+             логическое имя: /dev/snd/pcmC0D0p
+             логическое имя: /dev/snd/pcmC0D1c
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bus_master
+             конфигурация: driver=snd_intel8x0 latency=64
+             ресурсы: IRQ:21 ioport:d100(размер=256) ioport:d200(размер=64)
+        *-usb:0
+             описание: USB controller
+             продукт: KeyLargo/Intrepid USB
+             производитель: Apple Inc.
+             физический ID: 6
+             сведения о шине: pci@0000:00:06.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ohci bus_master cap_list
+             конфигурация: driver=ohci-pci latency=64
+             ресурсы: IRQ:22 память:f0804000-f0804fff
+           *-usbhost
+                продукт: OHCI PCI host controller
+                производитель: Linux 6.11.0-19-generic ohci_hcd
+                физический ID: 1
+                сведения о шине: usb@1
+                логическое имя: usb1
+                версия: 6.11
+                возможности: usb-1.10
+                конфигурация: driver=hub slots=12 speed=12Mbit/s
+              *-usb
+                   описание: HID
+                   продукт: VirtualBox USB Tablet
+                   производитель: VirtualBox
+                   физический ID: 1
+                   сведения о шине: usb@1:1
+                   логическое имя: input6
+                   логическое имя: /dev/input/event4
+                   логическое имя: /dev/input/js0
+                   логическое имя: /dev/input/mouse0
+                   версия: 1.00
+                   возможности: usb-1.10 usb
+                   конфигурация: driver=usbhid maxpower=100mA speed=12Mbit/s
+        *-bridge
+             описание: Bridge
+             продукт: 82371AB/EB/MB PIIX4 ACPI
+             производитель: Intel Corporation
+             физический ID: 7
+             сведения о шине: pci@0000:00:07.0
+             версия: 08
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bridge
+             конфигурация: driver=piix4_smbus latency=0
+             ресурсы: IRQ:9
+        *-usb:1
+             описание: USB controller
+             продукт: 82801FB/FBM/FR/FW/FRW (ICH6 Family) USB2 EHCI Controller
+             производитель: Intel Corporation
+             физический ID: b
+             сведения о шине: pci@0000:00:0b.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ehci bus_master cap_list
+             конфигурация: driver=ehci-pci latency=64
+             ресурсы: IRQ:19 память:f0805000-f0805fff
+           *-usbhost
+                продукт: EHCI Host Controller
+                производитель: Linux 6.11.0-19-generic ehci_hcd
+                физический ID: 1
+                сведения о шине: usb@2
+                логическое имя: usb2
+                версия: 6.11
+                возможности: usb-2.00
+                конфигурация: driver=hub slots=12 speed=480Mbit/s
+        *-sata
+             описание: SATA controller
+             продукт: 82801HM/HEM (ICH8M/ICH8M-E) SATA Controller [AHCI mode]
+             производитель: Intel Corporation
+             физический ID: d
+             сведения о шине: pci@0000:00:0d.0
+             логическое имя: scsi2
+             версия: 02
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: sata pm ahci_1.0 bus_master cap_list emulated
+             конфигурация: driver=ahci latency=64
+             ресурсы: IRQ:21 ioport:d240(размер=8) ioport:d248(размер=4) ioport:d250(размер=8) ioport:d258(размер=4) ioport:d260(размер=16) память:f0806000-f0807fff
+           *-disk
+                описание: ATA Disk
+                продукт: VBOX HARDDISK
+                производитель: VirtualBox
+                физический ID: 0.0.0
+                сведения о шине: scsi@2:0.0.0
+                логическое имя: /dev/sda
+                версия: 1.0
+                серийный №: VB4e1084c3-2c46367d
+                размер: 25GiB (26GB)
+                возможности: gpt-1.00 partitioned partitioned:gpt
+                конфигурация: ansiversion=5 guid=aecdcea2-165a-4abd-9e0f-a5ef32bff081 logicalsectorsize=512 sectorsize=512
+              *-volume:0
+                   описание: BIOS Boot partition
+                   производитель: EFI
+                   физический ID: 1
+                   сведения о шине: scsi@2:0.0.0,1
+                   логическое имя: /dev/sda1
+                   серийный №: 6d6cc99d-5eff-4fd6-a613-a26fc55053dc
+                   capacity: 1023KiB
+                   возможности: nofs
+              *-volume:1
+                   описание: Том EXT4
+                   производитель: Linux
+                   физический ID: 2
+                   сведения о шине: scsi@2:0.0.0,2
+                   логическое имя: /dev/sda2
+                   логическое имя: /
+                   версия: 1.0
+                   серийный №: 326b6bc2-2aac-4c5f-a847-4ef69582d42c
+                   размер: 24GiB
+                   возможности: journaled extended_attributes large_files huge_files dir_nlink recover 64bit extents ext4 ext2 initialized
+                   конфигурация: created=2025-03-16 21:52:53 filesystem=ext4 lastmountpoint=/ modified=2025-04-15 22:17:06 mount.fstype=ext4 mount.options=rw,relatime mounted=2025-04-14 00:34:10 state=mounted
+  *-input:0
+       продукт: Power Button
+       физический ID: 1
+       логическое имя: input0
+       логическое имя: /dev/input/event0
+       возможности: platform
+  *-input:1
+       продукт: Sleep Button
+       физический ID: 2
+       логическое имя: input1
+       логическое имя: /dev/input/event1
+       возможности: platform
+  *-input:2
+       продукт: AT Translated Set 2 keyboard
+       физический ID: 3
+       логическое имя: input2
+       логическое имя: /dev/input/event2
+       логическое имя: input2::capslock
+       логическое имя: input2::numlock
+       логическое имя: input2::scrolllock
+       возможности: i8042
+  *-input:3
+       продукт: Video Bus
+       физический ID: 4
+       логическое имя: input4
+       логическое имя: /dev/input/event3
+       возможности: platform
+  *-input:4
+       продукт: ImExPS/2 Generic Explorer Mouse
+       физический ID: 5
+       логическое имя: input5
+       логическое имя: /dev/input/event5
+       логическое имя: /dev/input/mouse1
+       возможности: i8042
+
+
+# ЗАДАНИЕ 1. Ознакомиться с типами файлов исследуемой ФС
+
+# Исполнение (выдача доступа, выходной файл)
+nastnest@bubunta:~$ chmod +x prob1.sh
+nastnest@bubunta:~$ ./prob1.sh prob1.txt
+nastnest@bubunta:~$ cat prob1.txt >> lab1.log
+
+Обычный файл:
+-rw-------   1 root root 3116367872 мар 16 22:05 /swap.img
+Специальный файл блочного устройства:
+brw-rw----   1 root     disk      7,   0 апр 14 00:34 /dev/loop0
+Файл символьного устройства:
+crw-r--r--   1 root     root     10, 235 апр 14 00:34 /dev/autofs
+Каталог:
+drwxr-xr-x   2 root root       4096 фев 26  2024 /bin.usr-is-merged
+Символьная ссылка:
+lrwxrwxrwx   1 root root          7 апр 22  2024 bin -> /usr/bin
+FIFO:
+prw-------  1 root              root      0 апр 14 00:34 /run/initctl
+Сокет:
+srw-rw-rw-  1 root              root      0 апр 14 00:34 /run/snapd-snap.socket
+
+Результаты в prob1.txt, дата и время: Ср 16 апр 2025 00:34:18 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 2. Получить все жесткие ссылки на заданный файл
+
+# В качестве задаваемого файла будет использоваться файл с результатами из 1 задания
+# Для начала нужно задать хоть какие-то жесткие ссылки, бахнем это
+nastnest@bubunta:~$ link prob1.txt link2
+nastnest@bubunta:~$ link prob1.txt link22
+nastnest@bubunta:~$ link prob1.txt ~/link2
+nastnest@bubunta:~$ link prob1.txt ~/link22
+
+# Теперь исполнение (снова доступ, вывод)
+nastnest@bubunta:~$ chmod +x prob2.sh
+nastnest@bubunta:~$ ./prob2.sh prob1.txt
+nastnest@bubunta:~$ cat prob2.txt >> lab1.log
+
+Введенный файл: /home/nastnest/Рабочий стол/os/prob1.txt
+Inode: 394682, жёстких ссылок: 4
+1. /home/link2
+2. /home/link22
+3. /home/nastnest/Рабочий стол/link2
+4. /home/nastnest/Рабочий стол/link22
+
+Результаты в prob2.txt, дата и время: Ср 16 апр 2025 02:08:31 MSK
+
+# Уберем эти ссылки и проверим корректный вывод без ссылок
+nastnest@bubunta:~$ rm link2
+nastnest@bubunta:~$ rm link22
+nastnest@bubunta:~$ rm ~/link2
+nastnest@bubunta:~$ rm ~/link22
+nastnest@bubunta:~$ ./prob2.sh prob1.txt
+nastnest@bubunta:~$ cat prob2.txt >> lab1.log
+
+Введенный файл: /home/nastnest/Рабочий стол/os/prob1.txt
+У введенного файла нет жестких ссылок
+
+Результаты в prob2.txt, дата и время: Ср 16 апр 2025 02:16:52 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 3. Способы формирования символьных ссылок
+
+# В качестве задаваемого файла будет использоваться файл с результатами из 1 задания
+# Зададим символьные ссылки, это удалось с помощью пары команд и флага -s
+# Причем cp -s может создавать символьные ссылки только в текущем каталоге
+# Можно, конечно, воспользоваться cd и перейти, но можно просто использовать ln -s
+nastnest@bubunta:~$ ln -s prob1.txt link3
+nastnest@bubunta:~$ cp -s prob1.txt link33
+nastnest@bubunta:~$ ln -s prob1.txt ~/link3
+nastnest@bubunta:~$ ln -s prob1.txt ~/link33
+
+# Теперь исполнение (снова доступ, вывод)
+nastnest@bubunta:~$ chmod +x prob3.sh
+nastnest@bubunta:~$ ./prob3.sh prob1.txt
+nastnest@bubunta:~$ cat prob3.txt >> lab1.log
+
+1.    153353      0 lrwxrwxrwx   1 nastnest nastnest        9 апр 16 02:48 /home/nastnest/link33 -> prob1.txt
+2.    157466      0 lrwxrwxrwx   1 nastnest nastnest        9 апр 16 02:47 /home/nastnest/link3 -> prob1.txt
+3.    394751      0 lrwxrwxrwx   1 nastnest nastnest        9 апр 16 02:41 /home/nastnest/\320\240\320\260\320\261\320\276\321\207\320\270\320\271\ \321\201\321\202\320\276\320\273/os/link33 -> prob1.txt
+4.    394745      0 lrwxrwxrwx   1 nastnest nastnest        9 апр 16 02:39 /home/nastnest/\320\240\320\260\320\261\320\276\321\207\320\270\320\271\ \321\201\321\202\320\276\320\273/os/link3 -> prob1.txt
+
+Результаты в prob3.txt, дата и время: Ср 16 апр 2025 03:24:00 MSK
+
+# Уберем эти ссылки и проверим корректный вывод без ссылок
+nastnest@bubunta:~$ rm link3
+nastnest@bubunta:~$ rm link33
+nastnest@bubunta:~$ rm ~/link3
+nastnest@bubunta:~$ rm ~/link33
+nastnest@bubunta:~$ ./prob3.sh prob1.txt
+nastnest@bubunta:~$ cat prob3.txt >> lab1.log
+
+У введенного файла нет полноименных символьных ссылок
+
+Результаты в prob3.txt, дата и время: Ср 16 апр 2025 03:29:40 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 4. Получить все символьные ссылки
+
+# В качестве задаваемого файла будет использоваться файл с результатами из 1 задания
+nastnest@bubunta:~$ ln -s prob1.txt link3
+nastnest@bubunta:~$ ln -s prob1.txt ~/link3
+
+# Теперь исполнение (снова доступ, вывод)
+nastnest@bubunta:~$ chmod +x prob4.sh
+nastnest@bubunta:~$ ./prob4.sh prob1.txt
+nastnest@bubunta:~$ cat prob4.txt >> lab1.log
+
+1) /home/nastnest/link3
+2) /home/nastnest/Рабочий стол/os/link3
+
+Результаты в prob4.txt, дата и время: Ср 16 апр 2025 03:46:49 MSK
+
+# Уберем эти ссылки и проверим корректный вывод без ссылок
+nastnest@bubunta:~$ rm link3
+nastnest@bubunta:~$ rm ~/link3
+nastnest@bubunta:~$ ./prob4.sh prob1.txt
+nastnest@bubunta:~$ cat prob4.txt >> lab1.log
+
+У введенного файла нет символьных ссылок
+
+Результаты в prob4.txt, дата и время: Ср 16 апр 2025 03:50:38 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 5. Изучить утилиту find
+
+# Начнем с директории, в которой находимся, выведем инфомацию только обычных файлов
+# Директория: /home/nastnest/Рабочий стол/os
+nastnest@bubunta:~$ find -type f -ls
+   394781      4 -rw-rw-r--   1 nastnest nastnest      169 апр 16 03:50 ./prob4.txt
+   394666      4 -rwxrwxr-x   1 nastnest nastnest     1204 апр 16 00:40 ./prob1.sh
+   394737      4 -rwxrwxr-x   1 nastnest nastnest      670 апр 16 03:32 ./prob3.sh
+   394778      4 -rwxrwxr-x   1 nastnest nastnest      773 апр 16 03:42 ./prob4.sh
+   394637     28 -rw-rw-r--   1 nastnest nastnest    26637 апр 16 03:58 ./lab1.log
+   394752      4 -rw-rw-r--   1 nastnest nastnest      194 апр 16 03:29 ./prob3.txt
+   394731      4 -rw-rw-r--   1 nastnest nastnest      244 апр 16 02:16 ./prob2.txt
+   394682      4 -rw-rw-r--   1 nastnest nastnest      806 апр 16 00:34 ./prob1.txt
+   394726      4 -rwxrwxr-x   1 nastnest nastnest     1192 апр 16 02:07 ./prob2.sh
+Ср 16 апр 2025 03:55:41 MSK
+
+# Теперь поищем в другой папке обычные файлы, директории, символьные ссылки
+# Директория: /home/nastnest/Рабочий стол
+nastnest@bubunta:~$ find -type f -ls
+   157486      4 -rw-rw-r--   1 nastnest nastnest        8 апр 16 04:04 ./hihi.txt
+   162273     12 -rw-r--r--   1 nastnest nastnest     9697 мар 31 17:09 ./pzcm/sof/Main.cpp
+   162276      4 -rw-r--r--   1 nastnest nastnest     1353 мар 30 14:16 ./pzcm/sof/RigidBody.h
+   162269      4 -rw-r--r--   1 nastnest nastnest     2859 мар 31 17:09 ./pzcm/sof/Collide.cpp
+   162274      4 -rw-r--r--   1 nastnest nastnest     1017 мар 18 20:37 ./pzcm/sof/Makefile
+   162270      4 -rw-r--r--   1 nastnest nastnest      935 мар 27 16:33 ./pzcm/sof/Collide.h
+   162271      8 -rw-r--r--   1 nastnest nastnest     7380 мар 30 14:29 ./pzcm/sof/Functions.cpp
+   162272      4 -rw-r--r--   1 nastnest nastnest     1117 мар 27 19:59 ./pzcm/sof/Functions.h
+   162275      4 -rw-r--r--   1 nastnest nastnest     1526 мар 30 14:27 ./pzcm/sof/RigidBody.cpp
+   160260     40 -rwxrwxr-x   1 nastnest nastnest    40336 апр  3 12:46 ./pzcm/sof/Rigid
+   152240      4 -rw-rw-r--   1 nastnest nastnest      335 мар 31 17:15 ./pzcm/lb1/a.txt
+   152235      4 -rw-rw-r--   1 nastnest nastnest      244 мар 30 21:19 ./pzcm/lb1/a.plot
+   157672      4 -rw-rw-r--   1 nastnest nastnest     2075 мар 31 17:15 ./pzcm/lb1/bucket.c
+   147781     20 -rwxrwxr-x   1 nastnest nastnest    16456 мар 31 17:15 ./pzcm/lb1/bucket
+   394781      4 -rw-rw-r--   1 nastnest nastnest      169 апр 16 03:50 ./os/prob4.txt
+   394666      4 -rwxrwxr-x   1 nastnest nastnest     1204 апр 16 00:40 ./os/prob1.sh
+   394737      4 -rwxrwxr-x   1 nastnest nastnest      670 апр 16 03:32 ./os/prob3.sh
+   394778      4 -rwxrwxr-x   1 nastnest nastnest      773 апр 16 03:42 ./os/prob4.sh
+   394637     28 -rw-rw-r--   1 nastnest nastnest    27719 апр 16 04:07 ./os/lab1.log
+   394752      4 -rw-rw-r--   1 nastnest nastnest      194 апр 16 03:29 ./os/prob3.txt
+   394731      4 -rw-rw-r--   1 nastnest nastnest      244 апр 16 02:16 ./os/prob2.txt
+   394682      4 -rw-rw-r--   1 nastnest nastnest      806 апр 16 00:34 ./os/prob1.txt
+   394726      4 -rwxrwxr-x   1 nastnest nastnest     1192 апр 16 02:07 ./os/prob2.sh
+nastnest@bubunta:~$ find -type d -ls
+   153749      4 drwxr-xr-x   4 nastnest nastnest     4096 апр 16 04:08 .
+   157205      4 drwxrwxr-x   4 nastnest nastnest     4096 апр  2 23:27 ./pzcm
+   162267      4 drwxr-xr-x   2 nastnest nastnest     4096 апр  3 12:46 ./pzcm/sof
+   162285      4 drwxrwxr-x   2 nastnest nastnest     4096 апр  2 23:27 ./pzcm/lb1
+   394636      4 drwxrwxr-x   2 nastnest nastnest     4096 апр 16 03:58 ./os
+nastnest@bubunta:~$ find -type l -ls
+   157490      0 lrwxrwxrwx   1 nastnest nastnest        8 апр 16 04:06 ./link4 -> hihi.txt
+Ср 16 апр 2025 03:58:12 MSK
+
+# Поищем файлы по времени изменения (измененные более 15 дней назад)
+# Директория: /home/nastnest/Рабочий стол
+nastnest@bubunta:~$ find -type f -mtime +15 -ls
+   162276      4 -rw-r--r--   1 nastnest nastnest     1353 мар 30 14:16 ./pzcm/sof/RigidBody.h
+   162274      4 -rw-r--r--   1 nastnest nastnest     1017 мар 18 20:37 ./pzcm/sof/Makefile
+   162270      4 -rw-r--r--   1 nastnest nastnest      935 мар 27 16:33 ./pzcm/sof/Collide.h
+   162271      8 -rw-r--r--   1 nastnest nastnest     7380 мар 30 14:29 ./pzcm/sof/Functions.cpp
+   162272      4 -rw-r--r--   1 nastnest nastnest     1117 мар 27 19:59 ./pzcm/sof/Functions.h
+   162275      4 -rw-r--r--   1 nastnest nastnest     1526 мар 30 14:27 ./pzcm/sof/RigidBody.cpp
+   152235      4 -rw-rw-r--   1 nastnest nastnest      244 мар 30 21:19 ./pzcm/lb1/a.plot
+Ср 16 апр 2025 03:59:47 MSK
+
+# Создадим так же сложные вложенные команды
+
+# Найдем файлы в директории, в которой находимся (исключив файлы из поддиректорий)
+# Причем только формата .txt и созданные недавно (пусть <= 3 дня назад)
+# Директория: /home/nastnest/Рабочий стол
+nastnest@bubunta:~$ find -maxdepth 1 -type f -name "*.txt" -mtime -3 -ls
+   157486      4 -rw-rw-r--   1 nastnest nastnest        8 апр 16 04:04 ./hihi.txt
+Ср 16 апр 2025 04:03:12 MSK
+
+# Теперь файлы размером >10 Кб, принадлежащие пользователю
+# Директория: /home/nastnest/Рабочий стол
+nastnest@bubunta:~$ find -type f -size +10k -user nastnest -ls
+   160260     40 -rwxrwxr-x   1 nastnest nastnest    40336 апр  3 12:46 ./pzcm/sof/Rigid
+   147781     20 -rwxrwxr-x   1 nastnest nastnest    16456 мар 31 17:15 ./pzcm/lb1/bucket
+   394637     32 -rw-rw-r--   1 nastnest nastnest    32075 апр 16 04:38 ./os/lab1.log
+Ср 16 апр 2025 04:05:36 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 6. Проанализировать содержимое заголовка файла
+
+# Проанализируем сначала с помощью od .sh .txt первого задания
+# Вывод будет реализован в шестнадцатиричной форме, по 1 байту
+# Выведем например первых 2^7 = 128 байтов файла (верится, что 7 счастливое число)
+# Иначе выводится очень много
+# Директория: /home/nastnest/Рабочий стол/os
+nastnest@bubunta:~$ od -t x1 -N 128 prob1.sh
+0000000 23 21 2f 62 69 6e 2f 62 61 73 68 0a 0a 69 66 20
+0000020 5b 20 24 23 20 2d 65 71 20 30 20 5d 3b 20 74 68
+0000040 65 6e 0a 20 20 20 20 65 63 68 6f 20 22 d0 a4 d0
+0000060 b0 d0 b9 d0 bb 20 d0 b4 d0 bb d1 8f 20 d0 b2 d1
+0000100 8b d0 b2 d0 be d0 b4 d0 b0 20 d0 bd d0 b5 20 d1
+0000120 83 d0 ba d0 b0 d0 b7 d0 b0 d0 bd 22 0a 20 20 20
+0000140 20 65 78 69 74 20 31 0a 66 69 0a 0a 6f 75 74 70
+0000160 75 74 3d 24 31 0a 3e 20 22 24 6f 75 74 70 75 74
+0000200
+Чт 17 апр 2025 00:03:26 MSK
+
+nastnest@bubunta:~$ od -t x1 -N 128 prob1.txt
+0000000 d0 9e d0 b1 d1 8b d1 87 d0 bd d1 8b d0 b9 20 d1
+0000020 84 d0 b0 d0 b9 d0 bb 3a 0a 2d 72 77 2d 2d 2d 2d
+0000040 2d 2d 2d 20 20 20 31 20 72 6f 6f 74 20 72 6f 6f
+0000060 74 20 33 31 31 36 33 36 37 38 37 32 20 d0 bc d0
+0000100 b0 d1 80 20 31 36 20 32 32 3a 30 35 20 2f 73 77
+0000120 61 70 2e 69 6d 67 0a d0 a1 d0 bf d0 b5 d1 86 d0
+0000140 b8 d0 b0 d0 bb d1 8c d0 bd d1 8b d0 b9 20 d1 84
+0000160 d0 b0 d0 b9 d0 bb 20 d0 b1 d0 bb d0 be d1 87 d0
+0000200
+Чт 17 апр 2025 00:04:20 MSK
+
+# Теперь используем hexdump
+# На вывод так же оставим 128 байт, вывод в шестнадцатиричной и ascii
+# Директория: /home/nastnest/Рабочий стол/os
+nastnest@bubunta:~$ hexdump -C -n 128 prob1.sh
+00000000  23 21 2f 62 69 6e 2f 62  61 73 68 0a 0a 69 66 20  |#!/bin/bash..if |
+00000010  5b 20 24 23 20 2d 65 71  20 30 20 5d 3b 20 74 68  |[ $# -eq 0 ]; th|
+00000020  65 6e 0a 20 20 20 20 65  63 68 6f 20 22 d0 a4 d0  |en.    echo "...|
+00000030  b0 d0 b9 d0 bb 20 d0 b4  d0 bb d1 8f 20 d0 b2 d1  |..... ...... ...|
+00000040  8b d0 b2 d0 be d0 b4 d0  b0 20 d0 bd d0 b5 20 d1  |......... .... .|
+00000050  83 d0 ba d0 b0 d0 b7 d0  b0 d0 bd 22 0a 20 20 20  |...........".   |
+00000060  20 65 78 69 74 20 31 0a  66 69 0a 0a 6f 75 74 70  | exit 1.fi..outp|
+00000070  75 74 3d 24 31 0a 3e 20  22 24 6f 75 74 70 75 74  |ut=$1.> "$output|
+00000080
+Чт 17 апр 2025 00:09:37 MSK
+
+nastnest@bubunta:~$ hexdump -C -n 128 prob1.txt
+00000000  d0 9e d0 b1 d1 8b d1 87  d0 bd d1 8b d0 b9 20 d1  |.............. .|
+00000010  84 d0 b0 d0 b9 d0 bb 3a  0a 2d 72 77 2d 2d 2d 2d  |.......:.-rw----|
+00000020  2d 2d 2d 20 20 20 31 20  72 6f 6f 74 20 72 6f 6f  |---   1 root roo|
+00000030  74 20 33 31 31 36 33 36  37 38 37 32 20 d0 bc d0  |t 3116367872 ...|
+00000040  b0 d1 80 20 31 36 20 32  32 3a 30 35 20 2f 73 77  |... 16 22:05 /sw|
+00000050  61 70 2e 69 6d 67 0a d0  a1 d0 bf d0 b5 d1 86 d0  |ap.img..........|
+00000060  b8 d0 b0 d0 bb d1 8c d0  bd d1 8b d0 b9 20 d1 84  |............. ..|
+00000070  d0 b0 d0 b9 d0 bb 20 d0  b1 d0 bb d0 be d1 87 d0  |...... .........|
+00000080
+Чт 17 апр 2025 00:10:18 MSK
+# Первый файл скрипт, ascii представление байтов в начале #!/bin/bash
+# Второй решил, что русские буквы ему не нужны, но видно первую обычную ссылку
+
+# Вспоминая курсовую 2 семестра, проанализируем изображение, для этого просто скачаем любую .png
+# Директория: /home/nastnest/Рабочий стол/os
+nastnest@bubunta:~$ ls
+hanako.png
+lab1.log
+prob1.sh
+prob1.txt
+prob2.sh
+prob2.txt
+prob3.sh
+prob3.txt
+prob4.sh
+prob4.txt
+nastnest@bubunta:~$ hexdump -C -n 128 hanako.png
+00000000  89 50 4e 47 0d 0a 1a 0a  00 00 00 0d 49 48 44 52  |.PNG........IHDR|
+00000010  00 00 01 9c 00 00 02 58  08 06 00 00 00 56 d0 50  |.......X.....V.P|
+00000020  06 00 00 80 00 49 44 41  54 78 da dc fd 77 b8 24  |.....IDATx...w.$|
+00000030  57 79 ee 0d ff 56 a8 aa  ce 3b 87 99 d9 93 f3 48  |Wy...V...;.....H|
+00000040  33 ca 19 84 90 c8 60 92  c9 07 0b 07 cc c1 06 07  |3.....`.........|
+00000050  1c b0 71 3e 36 ce d8 60  c0 d8 98 64 6c 4c 8e 46  |..q>6..`...dlL.F|
+00000060  08 49 08 21 50 ce 23 8d  a4 d1 e4 bc 73 ea dc 55  |.I.!P.#.....s..U|
+00000070  b5 c2 f7 47 f5 de 33 12  12 60 bf 3e ef 75 7d 6f  |...G..3..`.>.u}o|
+00000080
+nastnest@bubunta:~$ rm hanako.png
+Чт 17 апр 2025 00:29:29 MSK
+# И правда изображение, в начале сигнатура .PNG: 89 50 4e 47
+
+# Остается рассмотреть директорию, следует вернуться на Рабочий стол
+# Директория: /home/nastnest/Рабочий стол
+nastnest@bubunta:~$ hexdump -C -n 128 os
+exdump: os: Это каталог
+nastnest@bubunta:~$ od -t x1 -N 128 os
+od: os: Это каталог
+0000000
+Чт 17 апр 2025 00:40:08 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 7. Определить размер вновь созданного каталога
+
+# Исполнение (выдача доступа, выходной файл)
+nastnest@bubunta:~$ chmod +x prob7.sh
+nastnest@bubunta:~$ ./prob7.sh >> prob7.txt
+nastnest@bubunta:~$ cat prob7.txt >> lab1.log
+
+Создан каталог: test_dir
+Начальный размер: 4,0K
+Размер после создания 10 файлов: 44K
+Размер после создания 10 поддиректорий: 84K
+Размер после удаления файлов: 44K
+Размер после удаления поддиректорий: 4,0K
+Размер после sync: 4,0K
+Каталог удален
+
+Дата и время: Чт 17 апр 2025 01:04:00 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 8. Ознакомиться, проанализировать права доступа
+
+# /etc/passwd
+nastnest@bubunta:~$ cat /etc/passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+systemd-timesync:x:996:996:systemd Time Synchronization:/:/usr/sbin/nologin
+dhcpcd:x:100:65534:DHCP Client Daemon,,,:/usr/lib/dhcpcd:/bin/false
+messagebus:x:101:101::/nonexistent:/usr/sbin/nologin
+syslog:x:102:102::/nonexistent:/usr/sbin/nologin
+systemd-resolve:x:991:991:systemd Resolver:/:/usr/sbin/nologin
+uuidd:x:103:103::/run/uuidd:/usr/sbin/nologin
+usbmux:x:104:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+tss:x:105:105:TPM software stack,,,:/var/lib/tpm:/bin/false
+systemd-oom:x:990:990:systemd Userspace OOM Killer:/:/usr/sbin/nologin
+kernoops:x:106:65534:Kernel Oops Tracking Daemon,,,:/:/usr/sbin/nologin
+whoopsie:x:107:109::/nonexistent:/bin/false
+dnsmasq:x:999:65534:dnsmasq:/var/lib/misc:/usr/sbin/nologin
+avahi:x:108:111:Avahi mDNS daemon,,,:/run/avahi-daemon:/usr/sbin/nologin
+tcpdump:x:109:112::/nonexistent:/usr/sbin/nologin
+sssd:x:110:113:SSSD system user,,,:/var/lib/sss:/usr/sbin/nologin
+speech-dispatcher:x:111:29:Speech Dispatcher,,,:/run/speech-dispatcher:/bin/false
+cups-pk-helper:x:112:114:user for cups-pk-helper service,,,:/nonexistent:/usr/sbin/nologin
+fwupd-refresh:x:989:989:Firmware update daemon:/var/lib/fwupd:/usr/sbin/nologin
+saned:x:113:116::/var/lib/saned:/usr/sbin/nologin
+geoclue:x:114:117::/var/lib/geoclue:/usr/sbin/nologin
+cups-browsed:x:115:114::/nonexistent:/usr/sbin/nologin
+hplip:x:116:7:HPLIP system user,,,:/run/hplip:/bin/false
+gnome-remote-desktop:x:988:988:GNOME Remote Desktop:/var/lib/gnome-remote-desktop:/usr/sbin/nologin
+polkitd:x:987:987:User for polkitd:/:/usr/sbin/nologin
+rtkit:x:117:119:RealtimeKit,,,:/proc:/usr/sbin/nologin
+colord:x:118:120:colord colour management daemon,,,:/var/lib/colord:/usr/sbin/nologin
+gnome-initial-setup:x:119:65534::/run/gnome-initial-setup/:/bin/false
+gdm:x:120:121:Gnome Display Manager:/var/lib/gdm3:/bin/false
+nm-openvpn:x:121:122:NetworkManager OpenVPN,,,:/var/lib/openvpn/chroot:/usr/sbin/nologin
+nastnest:x:1000:1000:nastnest:/home/nastnest:/bin/bash
+vboxadd:x:997:1::/var/run/vboxadd:/bin/false
+Чт 17 апр 2025 01:10:35 MSK
+
+# /etc/shadow
+nastnest@bubunta:~$ sudo cat /etc/shadow
+root:*:20134:0:99999:7:::
+daemon:*:20134:0:99999:7:::
+bin:*:20134:0:99999:7:::
+sys:*:20134:0:99999:7:::
+sync:*:20134:0:99999:7:::
+games:*:20134:0:99999:7:::
+man:*:20134:0:99999:7:::
+lp:*:20134:0:99999:7:::
+mail:*:20134:0:99999:7:::
+news:*:20134:0:99999:7:::
+uucp:*:20134:0:99999:7:::
+proxy:*:20134:0:99999:7:::
+www-data:*:20134:0:99999:7:::
+backup:*:20134:0:99999:7:::
+list:*:20134:0:99999:7:::
+irc:*:20134:0:99999:7:::
+_apt:*:20134:0:99999:7:::
+nobody:*:20134:0:99999:7:::
+systemd-network:!*:20134::::::
+systemd-timesync:!*:20134::::::
+dhcpcd:!:20134::::::
+messagebus:!:20134::::::
+syslog:!:20134::::::
+systemd-resolve:!*:20134::::::
+uuidd:!:20134::::::
+usbmux:!:20134::::::
+tss:!:20134::::::
+systemd-oom:!*:20134::::::
+kernoops:!:20134::::::
+whoopsie:!:20134::::::
+dnsmasq:!:20134::::::
+avahi:!:20134::::::
+tcpdump:!:20134::::::
+sssd:!:20134::::::
+speech-dispatcher:!:20134::::::
+cups-pk-helper:!:20134::::::
+fwupd-refresh:!*:20134::::::
+saned:!:20134::::::
+geoclue:!:20134::::::
+cups-browsed:!:20134::::::
+hplip:!:20134::::::
+gnome-remote-desktop:!*:20134::::::
+polkitd:!*:20134::::::
+rtkit:!:20134::::::
+colord:!:20134::::::
+gnome-initial-setup:!:20134::::::
+gdm:!:20134::::::
+nm-openvpn:!:20134::::::
+nastnest:$6$YRd423uMpM8ph538$QaU9StE/R2NMrN6yATCrsx4b.Bi5H73gB/7v1GmOXkJFp8GfZqYLcet0aUx8rphFIuWilyoV4mDFOgA6SNW.6.:20163:0:99999:7:::
+vboxadd:!:20163::::::
+Чт 17 апр 2025 01:12:12 MSK
+
+# Права доступа
+nastnest@bubunta:~$ ls -l /etc/passwd /etc/shadow /usr/bin/passwd
+-rw-r--r-- 1 root root    2915 мар 16 23:32 /etc/passwd
+-rw-r----- 1 root shadow  1363 мар 16 23:32 /etc/shadow
+-rwsr-xr-x 1 root root   64152 мая 30  2024 /usr/bin/passwd
+Чт 17 апр 2025 01:17:47 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 9. Исследование прав владения и доступа
+
+# 9.1. Примеры применения утилит chmod, chown
+
+# Создадим отдельный каталог
+nastnest@bubunta:~$ mkdir prob9
+
+# Текущая директория: /home/nastnest/Рабочий стол/os/prob9
+# Создание каталога и файлов
+nastnest@bubunta:~$ touch file1 file2 file3
+# Также был создан скрипт
+nastnest@bubunta:~$ cat script.sh
+#!/bin/bash
+echo "meow"
+
+# chmod
+nastnest@bubunta:~$ ls -l
+итого 4
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file1
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rw-rw-r-- 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:41:43 MSK
+
+nastnest@bubunta:~$ chmod 755 file1
+nastnest@bubunta:~$ ls -l
+итого 4
+-rwxr-xr-x 1 nastnest nastnest  0 апр 17 01:29 file1
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rw-rw-r-- 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:43:54 MSK
+
+nastnest@bubunta:~$ chmod u=rw,g=r,o= file2
+nastnest@bubunta:~$ ls -l
+итого 4
+-rwxr-xr-x 1 nastnest nastnest  0 апр 17 01:29 file1
+-rw-r----- 1 nastnest nastnest  0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rw-rw-r-- 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:45:30 MSK
+
+nastnest@bubunta:~$ chmod +x script.sh
+nastnest@bubunta:~$ ls -l
+итого 4
+-rwxr-xr-x 1 nastnest nastnest  0 апр 17 01:29 file1
+-rw-r----- 1 nastnest nastnest  0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rwxrwxr-x 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:46:13 MSK
+
+# chown
+nastnest@bubunta:~$ sudo chown root file1
+nastnest@bubunta:~$ ls -l
+итого 4
+-rwxr-xr-x 1 root     nastnest  0 апр 17 01:29 file1
+-rw-r----- 1 nastnest nastnest  0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rwxrwxr-x 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:48:48 MSK
+
+nastnest@bubunta:~$ sudo chown :users file2
+nastnest@bubunta:~$ ls -l
+итого 4
+-rwxr-xr-x 1 root     nastnest  0 апр 17 01:29 file1
+-rw-r----- 1 nastnest users     0 апр 17 01:29 file2
+-rw-rw-r-- 1 nastnest nastnest  0 апр 17 01:29 file3
+-rwxrwxr-x 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 01:49:35 MSK
+
+# 9.2. Расширить права исполнения
+
+# Файл уже исполняемый, осталось расширить права с помощью set user id
+nastnest@bubunta:~$ chmod u+s script.sh
+nastnest@bubunta:~$ ls -l script.sh
+-rwsrwxr-x 1 nastnest nastnest 24 апр 17 01:36 script.sh
+Чт 17 апр 2025 02:28:29 MSK
+
+# 9.3. Итоговые права на использование файла
+
+# Создаем тестового пользователя и группу
+nastnest@bubunta:~$ sudo useradd testuser
+nastnest@bubunta:~$ sudo groupadd testgroup
+nastnest@bubunta:~$ sudo usermod -aG testuser testgroup
+nastnest@bubunta:~$ echo "meow" >> prob9.txt
+nastnest@bubunta:~$ sudo chown testuser:testgroup prob9.txt
+nastnest@bubunta:~$ sudo chmod 640 prob9.txt
+nastnest@bubunta:~$ ls -l prob9.txt
+-rw-r----- 1 testuser testgroup 5 апр 17 02:52 prob9.txt
+Чт 17 апр 2025 02:58:09 MSK
+
+# Владелец с правами rw- может открыть файл и на чтение, и на запись
+nastnest@bubunta:~$ sudo -u testuser bash -c "echo 'Test' > prob9.txt" 
+nastnest@bubunta:~$ sudo -u testuser cat prob9.txt
+Test
+Чт 17 апр 2025 03:02:17 MSK
+
+# Одногруппник с правами r-- может открыть файл только на чтение
+nastnest@bubunta:~$ sudo useradd readuser
+nastnest@bubunta:~$ sudo usermod -aG testgroup readuser  
+nastnest@bubunta:~$ sudo -u readuser bash -c "echo 'Boo' > prob9.txt" 
+bash: строка 1: prob9.txt: Отказано в доступе
+nastnest@bubunta:~$ sudo -u readuser cat prob9.txt
+Test
+Чт 17 апр 2025 03:07:26 MSK
+
+# Пользователь не из группы не имеет доступа к файлу
+nastnest@bubunta:~$ sudo useradd otheruser 
+nastnest@bubunta:~$ sudo -u otheruser cat prob9.txt
+cat: prob9.txt: Отказано в доступе
+Чт 17 апр 2025 03:09:02 MSK
+
+nastnest@bubunta:~$ sudo chown nastnest:nastnest prob9.tx
+nastnest@bubunta:~$ sudo chown nastnest:nastnest file3
+nastnest@bubunta:~$ sudo userdel testuser
+nastnest@bubunta:~$ sudo userdel readuser
+nastnest@bubunta:~$ sudo userdel otheruser
+nastnest@bubunta:~$ sudo groupdel testgroup
+nastnest@bubunta:~$ ls -l prob9.txt file3
+-rw-r----- 1 nastnest nastnest 0 апр 17 01:29 file3
+-rw-r----- 1 nastnest nastnest 5 апр 17 03:00 prob9.txt
+Чт 17 апр 2025 03:21:13 MSK
+
+# 9.4. Dозможности исполнения часто используемых операций
+
+Операция	            Файл	Каталог	    Объяснение
+cd (войти в каталог)	-	    x	        Нужен исполняемый доступ к каталогу
+ls (список файлов)	    -	    r	        Достаточно чтения каталога
+ls -l (подробный)	    -	    rx	        Требуется чтение, исполнение каталога
+cat (чтение файла)	    r	    x	        Чтение файла, доступ к каталогу
+echo (запись в файл)	w	    x	        Запись в файл, доступ к каталогу
+rm (удаление файла)	    -	    wx	        Удаление зависит от прав каталога
+cp (копирование)	    r	    wx	        Чтение файла, запись в каталог
+mv (перемещение)	    -	    wx          Зависит от прав исходного и целевого каталогов
+./script (запуск)	    rx	    x	        Нужны чтение, исполнение файла и доступ к каталогу
+touch (создание файла)	-	    wx	        Зависит от прав каталога
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 10. Программа-шлюз для доступа к файлу
+
+nastnest@bubunta:~$ echo "tss.. it's a secret..." > secret10.txt
+nastnest@bubunta:~$ chmod 600 secret10.txt
+nastnest@bubunta:~$ sudo useradd testuser
+nastnest@bubunta:~$ sudo useradd testuser2
+nastnest@bubunta:~$ sudo groupadd testgroup
+nastnest@bubunta:~$ sudo usermod -aG testgroup testuser
+nastnest@bubunta:~$ sudo usermod -aG testgroup testuser2
+nastnest@bubunta:~$ sudo chown testuser:testgroup secret10.txt
+nastnest@bubunta:~$ ls -l secret10.txt
+-rw------- 1 testuser testgroup 23 апр 17 04:32 secret10.txt
+nastnest@bubunta:~$ g++ prob10.cpp
+nastnest@bubunta:~$ chmod u+s a.out
+nastnest@bubunta:~$ sudo chown testuser:testgroup a.out
+nastnest@bubunta:~$ ls -l a.out
+-rwsrwxr-x 1 testuser testgroup 24512 апр 17 04:41 a.out
+
+# Только testuser может открыть файл
+nastnest@bubunta:~$ ./a.out secret10.txt
+Ошибка открытия файла 'secret10.txt'
+nastnest@bubunta:~$ sudo -u testuser ./a.out secret10.txt
+tss.. it's a secret...
+nastnest@bubunta:~$ sudo -u testuser2 ./a.out secret10.txt
+Ошибка открытия файла 'secret10.txt'
+
+nastnest@bubunta:~$ sudo chmod 775 secret10.txt
+nastnest@bubunta:~$ ls -l secret10.txt
+-rwxrwxr-x 1 testuser testgroup 23 апр 17 04:32 secret10.txt
+
+# Теперь все в группе testgroup могут открыть файл
+nastnest@bubunta:~$ sudo -u testuser2 ./a.out secret10.txt
+tss.. it's a secret...
+nastnest@bubunta:~$ ./a.out secret10
+Ошибка открытия файла 'secret10'.
+nastnest@bubunta:~$ sudo -u testuser ./a.out secret10.txt
+tss.. it's a secret...
+
+Чт 17 апр 2025 05:12:11 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 11. Информация о файловых системах
+
+nastnest@bubunta:~$ df -h
+Файл.система   Размер Использовано  Дост Использовано% Cмонтировано в
+tmpfs            298M         1,6M  296M            1% /run
+/dev/sda2         25G          11G   13G           45% /
+tmpfs            1,5G          24M  1,5G            2% /dev/shm
+tmpfs            5,0M         8,0K  5,0M            1% /run/lock
+tmpfs            298M         172K  298M            1% /run/user/1000
+/dev/sr0          58M          58M     0          100% /media/nastnest/VBox_GAs_7.1.6
+
+nastnest@bubunta:~$ mount
+sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)
+proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)
+udev on /dev type devtmpfs (rw,nosuid,relatime,size=1483772k,nr_inodes=370943,mode=755,inode64)
+devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)
+tmpfs on /run type tmpfs (rw,nosuid,nodev,noexec,relatime,size=304376k,mode=755,inode64)
+/dev/sda2 on / type ext4 (rw,relatime)
+securityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev,inode64)
+tmpfs on /run/lock type tmpfs (rw,nosuid,nodev,noexec,relatime,size=5120k,inode64)
+cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)
+pstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)
+bpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)
+systemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=32,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=3758)
+hugetlbfs on /dev/hugepages type hugetlbfs (rw,nosuid,nodev,relatime,pagesize=2M)
+mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)
+debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)
+tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)
+fusectl on /sys/fs/fuse/connections type fusectl (rw,nosuid,nodev,noexec,relatime)
+configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)
+/var/lib/snapd/snaps/bare_5.snap on /snap/bare/5 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/code_187.snap on /snap/code/187 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core20_2496.snap on /snap/core20/2496 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/core22_1802.snap on /snap/core22/1802 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/firefox_5947.snap on /snap/firefox/5947 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/firmware-updater_167.snap on /snap/firmware-updater/167 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gtk-common-themes_1535.snap on /snap/gtk-common-themes/1535 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/gnome-42-2204_202.snap on /snap/gnome-42-2204/202 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snap-store_1248.snap on /snap/snap-store/1248 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd-desktop-integration_253.snap on /snap/snapd-desktop-integration/253 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/snapd_23545.snap on /snap/snapd/23545 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+binfmt_misc on /proc/sys/fs/binfmt_misc type binfmt_misc (rw,nosuid,nodev,noexec,relatime)
+tmpfs on /run/snapd/ns type tmpfs (rw,nosuid,nodev,noexec,relatime,size=304376k,mode=755,inode64)
+nsfs on /run/snapd/ns/snapd-desktop-integration.mnt type nsfs (rw)
+tmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=304372k,nr_inodes=76093,mode=700,uid=1000,gid=1000,inode64)
+portal on /run/user/1000/doc type fuse.portal (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+gvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)
+/dev/sr0 on /media/nastnest/VBox_GAs_7.1.6 type iso9660 (ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8,uhelper=udisks2)
+/var/lib/snapd/snaps/core22_1908.snap on /snap/core22/1908 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+nsfs on /run/snapd/ns/firmware-updater.mnt type nsfs (rw)
+/var/lib/snapd/snaps/snapd_23771.snap on /snap/snapd/23771 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+/var/lib/snapd/snaps/firefox_6042.snap on /snap/firefox/6042 type squashfs (ro,nodev,relatime,errors=continue,threads=single,x-gdu.hide,x-gvfs-hide)
+nsfs on /run/snapd/ns/firefox.mnt type nsfs (rw)
+
+nastnest@bubunta:~$ lsblk -f
+NAME   FSTYPE   FSVER            LABEL          UUID                                 FSAVAIL FSUSE% MOUNTPOINTS
+loop0  squashfs 4.0                                                                        0   100% /snap/bare/5
+loop1  squashfs 4.0                                                                        0   100% /snap/code/187
+loop2                                                                                      0   100% /snap/core20/2496
+loop3                                                                                      0   100% /snap/snapd/23771
+loop5                                                                                      0   100% /snap/core22/1802
+loop6                                                                                      0   100% /snap/firefox/5947
+loop7                                                                                      0   100% /snap/firmware-updater/167
+loop8                                                                                      0   100% /snap/gnome-42-2204/202
+loop9                                                                                      0   100% /snap/gtk-common-themes/1535
+loop10                                                                                     0   100% /snap/snap-store/1248
+loop11                                                                                     0   100% /snap/snapd-desktop-integration/253
+loop12                                                                                     0   100% /snap/snapd/23545
+loop13                                                                                     0   100% /snap/core22/1908
+loop14                                                                                     0   100% /snap/firefox/6042
+sda                                                                                                 
+├─sda1                                                                                              
+└─sda2 ext4     1.0                             326b6bc2-2aac-4c5f-a847-4ef69582d42c   12,8G    43% /
+sr0    iso9660  Joliet Extension VBox_GAs_7.1.6 2025-01-21-13-18-27-98                     0   100% /media/nastnest/VBox_GAs_7.1.6
+
+nastnest@bubunta:~$ cat /etc/fstab
+# /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a
+# device; this may be used with UUID= as a more robust way to name devices
+# that works even if disks are added and removed. See fstab(5).
+#
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+# / was on /dev/sda2 during curtin installation
+/dev/disk/by-uuid/326b6bc2-2aac-4c5f-a847-4ef69582d42c / ext4 defaults 0 1
+/swap.img	none	swap	sw	0	0
+
+# 11.1. Информация об утилитах
+
+# Утилита df показывает информацию о смонтированных файловых системах, включая:
+#   Имя устройств, общий размер, используемое/доступное пространство, точку монтирования
+# Утилита mount показывает список смонтированных файловых систем и параметры
+# Утилита ldblk выводит список блочных устройств (дисков и разделов) с базовой информацией
+#   с флагом -f добавляет информацию о файловых системах:
+#   UUID, тип файловой системы, метка тома, размер ФС, используемое пространство
+# Информационный файл /etc/fstab содержит информацию о ФС, которые м.б. смонтированы
+
+# 11.2. Образ диска, полного дерева ФС
+
+nastnest@bubunta:~$ lsblk
+NAME   MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS
+loop0    7:0    0     4K  1 loop /snap/bare/5
+loop1    7:1    0 316,8M  1 loop /snap/code/187
+loop2    7:2    0  63,7M  1 loop /snap/core20/2496
+loop3    7:3    0  44,4M  1 loop /snap/snapd/23771
+loop5    7:5    0  73,9M  1 loop /snap/core22/1802
+loop6    7:6    0 258,3M  1 loop /snap/firefox/5947
+loop7    7:7    0  11,1M  1 loop /snap/firmware-updater/167
+loop8    7:8    0   516M  1 loop /snap/gnome-42-2204/202
+loop9    7:9    0  91,7M  1 loop /snap/gtk-common-themes/1535
+loop10   7:10   0  10,8M  1 loop /snap/snap-store/1248
+loop11   7:11   0   568K  1 loop /snap/snapd-desktop-integration/253
+loop12   7:12   0  44,4M  1 loop /snap/snapd/23545
+loop13   7:13   0  73,9M  1 loop /snap/core22/1908
+loop14   7:14   0   242M  1 loop /snap/firefox/6042
+sda      8:0    0    25G  0 disk 
+├─sda1   8:1    0     1M  0 part 
+└─sda2   8:2    0    25G  0 part /
+sr0     11:0    1  57,4M  0 rom  /media/nastnest/VBox_GAs_7.1.6
+Чт 17 апр 2025 05:52:22 MSK
+
+nastnest@bubunta:~$ findmnt
+TARGET                                            SOURCE                 FSTYPE          OPTIONS
+/                                                 /dev/sda2              ext4            rw,relatime
+├─/sys                                            sysfs                  sysfs           rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/kernel/security                          securityfs             securityfs      rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/cgroup                                cgroup2                cgroup2         rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot
+│ ├─/sys/fs/pstore                                pstore                 pstore          rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/bpf                                   bpf                    bpf             rw,nosuid,nodev,noexec,relatime,mode=700
+│ ├─/sys/kernel/debug                             debugfs                debugfs         rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/kernel/tracing                           tracefs                tracefs         rw,nosuid,nodev,noexec,relatime
+│ ├─/sys/fs/fuse/connections                      fusectl                fusectl         rw,nosuid,nodev,noexec,relatime
+│ └─/sys/kernel/config                            configfs               configfs        rw,nosuid,nodev,noexec,relatime
+├─/proc                                           proc                   proc            rw,nosuid,nodev,noexec,relatime
+│ └─/proc/sys/fs/binfmt_misc                      systemd-1              autofs          rw,relatime,fd=32,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=3758
+│   └─/proc/sys/fs/binfmt_misc                    binfmt_misc            binfmt_misc     rw,nosuid,nodev,noexec,relatime
+├─/dev                                            udev                   devtmpfs        rw,nosuid,relatime,size=1483772k,nr_inodes=370943,mode=755,inode64
+│ ├─/dev/pts                                      devpts                 devpts          rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000
+│ ├─/dev/shm                                      tmpfs                  tmpfs           rw,nosuid,nodev,inode64
+│ ├─/dev/hugepages                                hugetlbfs              hugetlbfs       rw,nosuid,nodev,relatime,pagesize=2M
+│ └─/dev/mqueue                                   mqueue                 mqueue          rw,nosuid,nodev,noexec,relatime
+├─/run                                            tmpfs                  tmpfs           rw,nosuid,nodev,noexec,relatime,size=304376k,mode=755,inode64
+│ ├─/run/lock                                     tmpfs                  tmpfs           rw,nosuid,nodev,noexec,relatime,size=5120k,inode64
+│ ├─/run/snapd/ns                                 tmpfs[/snapd/ns]       tmpfs           rw,nosuid,nodev,noexec,relatime,size=304376k,mode=755,inode64
+│ │ ├─/run/snapd/ns/snapd-desktop-integration.mnt nsfs[mnt:[4026532433]] nsfs            rw
+│ │ ├─/run/snapd/ns/firmware-updater.mnt          nsfs[mnt:[4026532206]] nsfs            rw
+│ │ └─/run/snapd/ns/firefox.mnt                   nsfs[mnt:[4026532210]] nsfs            rw
+│ └─/run/user/1000                                tmpfs                  tmpfs           rw,nosuid,nodev,relatime,size=304372k,nr_inodes=76093,mode=700,uid=1000,gid=1000,inode64
+│   ├─/run/user/1000/doc                          portal                 fuse.portal     rw,nosuid,nodev,relatime,user_id=1000,group_id=1000
+│   └─/run/user/1000/gvfs                         gvfsd-fuse             fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000
+├─/snap/bare/5                                    /dev/loop0             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/code/187                                  /dev/loop1             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/core20/2496                               /dev/loop2             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/core22/1802                               /dev/loop5             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/firefox/5947                              /dev/loop6             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/firmware-updater/167                      /dev/loop7             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/gtk-common-themes/1535                    /dev/loop9             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/gnome-42-2204/202                         /dev/loop8             squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/snap-store/1248                           /dev/loop10            squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/snapd-desktop-integration/253             /dev/loop11            squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/snapd/23545                               /dev/loop12            squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/snap/core22/1908                               /dev/loop13            squashfs        ro,nodev,relatime,errors=continue,threads=single
+├─/media/nastnest/VBox_GAs_7.1.6                  /dev/sr0               iso9660         ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8
+├─/snap/snapd/23771                               /dev/loop3             squashfs        ro,nodev,relatime,errors=continue,threads=single
+└─/snap/firefox/6042                              /dev/loop14            squashfs        ro,nodev,relatime,errors=continue,threads=single
+Чт 17 апр 2025 05:53:53 MSK
+
+# Формат таблицы монтирования
+# Таблица монтирования (/etc/fstab) имеет следующий формат:
+# Устройство (UUID) → Точка монтирования → Тип ФС → Параметры монтирования → Резервное копирование → Проверка ФС при загрузке 
+# <file system> <mount point> <type> <options> <dump> <pass>
+
+# 11.3. Максимально возможный путь
+
+nastnest@bubunta:~$ getconf PATH_MAX /
+4096
+Чт 17 апр 2025 06:17:50 MSK
+
+# Состояние не изменилось после выполнения задания
+
+
+# ЗАДАНИЕ 12. Принцип работы file
+
+# 12.1. Алгоритм функционирования
+
+# Утилита file в Unix-подобных системах предназначена для определения типа файла на основе его содержимого, а не только по расширению
+# Она анализирует "магические числа" (последовательности байтов) и другие признаки в заголовке файла, сравнивая их с шаблонами из базы данных magic
+# База данных находится в данном файле: /usr/share/misc/magic.mgc
+# Если магические числа отсутствуют, анализирует текстовое содержимое, кодировку, печатные символы
+# Если ничего не удается определить, утилита выведет простую информацию, такую как "data" ("неопределённый тип").
+# Магические числа находятся в начале, например:
+# Исполняемый файл - 7F 45 4C 46, PNG изображения - 89 50 4E 47 0D 0A 1A 0A
+
+# 12.2. Выполнить с разными ключами
+
+# Без ключей - имя файла и его тип
+nastnest@bubunta:~$ file prob10.cpp
+prob10.cpp: C source, Unicode text, UTF-8 text
+
+# -b - только тип файла, без имени
+nastnest@bubunta:~$ file -b prob1.sh
+Bourne-Again shell script, Unicode text, UTF-8 text executable
+
+# -r - полные пути к файлам с их типами, сырой формат с возможным непечатаемыми символами
+nastnest@bubunta:~$ file -r /home/nastnest/"Рабочий стол"/os/*
+/home/nastnest/Рабочий стол/os/lab1.log:   Unicode text, UTF-8 text, with very long lines (459)
+/home/nastnest/Рабочий стол/os/prob10.cpp: C source, Unicode text, UTF-8 text
+/home/nastnest/Рабочий стол/os/prob1.sh:   Bourne-Again shell script, Unicode text, UTF-8 text executable
+/home/nastnest/Рабочий стол/os/prob1.txt:  Unicode text, UTF-8 text
+/home/nastnest/Рабочий стол/os/prob2.sh:   Bourne-Again shell script, Unicode text, UTF-8 text executable
+/home/nastnest/Рабочий стол/os/prob2.txt:  Unicode text, UTF-8 text
+/home/nastnest/Рабочий стол/os/prob3.sh:   Bourne-Again shell script, Unicode text, UTF-8 text executable
+/home/nastnest/Рабочий стол/os/prob3.txt:  Unicode text, UTF-8 text
+/home/nastnest/Рабочий стол/os/prob4.sh:   Bourne-Again shell script, Unicode text, UTF-8 text executable
+/home/nastnest/Рабочий стол/os/prob4.txt:  Unicode text, UTF-8 text
+/home/nastnest/Рабочий стол/os/prob7.sh:   Bourne-Again shell script, Unicode text, UTF-8 text executable
+/home/nastnest/Рабочий стол/os/prob7.txt:  Unicode text, UTF-8 text
+
+# -i - MIME-тип файла
+nastnest@bubunta:~$ file -i /home/nastnest/"Рабочий стол"/os
+/home/nastnest/Рабочий стол/os: inode/directory; charset=binary
+
+# Ключей еще много, можно просто вывести справку
+nastnest@bubunta:~$ file --help
+Usage: file [OPTION...] [FILE...]
+Determine type of FILEs.
+
+      --help                 display this help and exit
+  -v, --version              output version information and exit
+  -m, --magic-file LIST      use LIST as a colon-separated list of magic
+                               number files
+  -z, --uncompress           try to look inside compressed files
+  -Z, --uncompress-noreport  only print the contents of compressed files
+  -b, --brief                do not prepend filenames to output lines
+  -c, --checking-printout    print the parsed form of the magic file, use in
+                               conjunction with -m to debug a new magic file
+                               before installing it
+  -e, --exclude TEST         exclude TEST from the list of test to be
+                               performed for file. Valid tests are:
+                               apptype, ascii, cdf, compress, csv, elf,
+                               encoding, soft, tar, json, simh,
+                               text, tokens
+      --exclude-quiet TEST   like exclude, but ignore unknown tests
+  -f, --files-from FILE      read the filenames to be examined from FILE
+  -F, --separator STRING     use string as separator instead of `:'
+  -i, --mime                 output MIME type strings (--mime-type and
+                               --mime-encoding)
+      --apple                output the Apple CREATOR/TYPE
+      --extension            output a slash-separated list of extensions
+      --mime-type            output the MIME type
+      --mime-encoding        output the MIME encoding
+  -k, --keep-going           don't stop at the first match
+  -l, --list                 list magic strength
+  -L, --dereference          follow symlinks (default if POSIXLY_CORRECT is set)
+  -h, --no-dereference       don't follow symlinks (default if POSIXLY_CORRECT is not set) (default)
+  -n, --no-buffer            do not buffer output
+  -N, --no-pad               do not pad output
+  -0, --print0               terminate filenames with ASCII NUL
+  -p, --preserve-date        preserve access times on files
+  -P, --parameter            set file engine parameter limits
+                                   bytes 7340032 max bytes to look inside file
+                               elf_notes     256 max ELF notes processed
+                               elf_phnum    2048 max ELF prog sections processed
+                               elf_shnum   32768 max ELF sections processed
+                               elf_shsize 134217728 max ELF section size
+                                encoding   65536 max bytes to scan for encoding
+                                   indir      50 recursion limit for indirection
+                                    name      50 use limit for name/use magic
+                                   regex    8192 length limit for REGEX searches
+  -r, --raw                  don't translate unprintable chars to \ooo
+  -s, --special-files        treat special (block/char devices) files as
+                             ordinary ones
+  -S, --no-sandbox           disable system call sandboxing
+  -C, --compile              compile file specified by -m
+  -d, --debug                print debugging messages
+Чт 17 апр 2025 07:32:44 MSK
+
+# 12.3. Добавление в базу собственного типа файла
+
+# LAVR - x4C\x41\x56\x52
+nastnest@bubunta:~$ echo "0 string \x4C\x41\x56\x52 LavrType file" > magic
+nastnest@bubunta:~$ cat magic
+0 string \x4C\x41\x56\x52 LavrType file
+nastnest@bubunta:~$ file -C -m magic
+nastnest@bubunta:~$ echo -ne '\x4C\x41\x56\x52' > file.lavr
+nastnest@bubunta:~$ echo "This file is lavr's file, best dog" >> file.lavr
+nastnest@bubunta:~$ file -m magic file.lavr
+file.lavr: LavrType file
+Чт 17 апр 2025 07:46:08 MSK
