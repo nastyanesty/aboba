@@ -1,0 +1,1290 @@
+# Дорогушина Анастасия Александровна, гр.3385
+# Лабораторная работа №2: Управление процессами и потоками
+# Основные сведения
+
+nastnest@bubunta:~$ date
+Вт 29 апр 2025 04:41:12 MSK
+
+nastnest@bubunta:~$ who
+nastnest seat0        2025-04-27 16:45 (login screen)
+nastnest tty2         2025-04-27 16:45 (tty2)
+
+
+# ЗАДАНИЕ 1. Управление заданиями
+
+# 1.1. Утилиты в фоновом режиме
+
+nastnest@bubunta:~$ sleep 50 & sleep 60 & sleep 70 & date
+[1] 5644
+[2] 5645
+[3] 5646
+Чт 01 мая 2025 14:09:12 MSK
+nastnest@bubunta:~$ jobs
+[1]   Запущен          sleep 50 &
+[2]-  Запущен          sleep 60 &
+[3]+  Запущен          sleep 70 &
+Чт 01 мая 2025 14:09:28 MSK
+
+nastnest@bubunta:~$ kill %1
+[1]   Завершено      sleep 50
+nastnest@bubunta:~$ jobs
+[2]-  Запущен          sleep 60 &
+[3]+  Запущен          sleep 70 &
+Чт 01 мая 2025 14:09:44 MSK
+
+nastnest@bubunta:~$ fg %2
+sleep 60
+^C
+nastnest@bubunta:~$ jobs
+[3]+  Запущен          sleep 70 &
+nastnest@bubunta:~$ date
+[3]+  Завершён        sleep 70
+Чт 01 мая 2025 14:10:27 MSK
+
+# 1.2. Команда nohup(1)
+
+nastnest@bubunta:~$ nohup sleep 3600 &
+[1] 7393
+nastnest@bubunta:~$ nohup: ввод игнорируется, вывод добавляется в 'nohup.out'
+nastnest@bubunta:~$ jobs
+[1]+  Запущен          nohup sleep 3600 &
+Чт 01 мая 2025 14:28:45 MSK
+
+nastnest@bubunta:~$ exit
+nastnest@bubunta:~$ ps -eo pid,user,cmd | grep sleep >> lab2.log
+   7393 nastnest sleep 3600
+   7909 nastnest grep --color=auto sleep
+Чт 01 мая 2025 14:34:34 MSK
+
+# nohup нужен для долгих задач, которые должны работать даже после закрытия терминала
+# Без nohup процессы завершаются при закрытии терминала
+
+# 1.3. uid, pid процессов
+
+nastnest@bubunta:~$ ps -eo uid,pid,user,cmd
+  UID     PID USER     CMD
+    0       1 root     /sbin/init splash
+    0       2 root     [kthreadd]
+    0       3 root     [pool_workqueue_release]
+    0       4 root     [kworker/R-rcu_gp]
+    0       5 root     [kworker/R-sync_wq]
+    0       6 root     [kworker/R-slub_flushwq]
+    0       7 root     [kworker/R-netns]
+    0       8 root     [kworker/0:0-events]
+    0      12 root     [kworker/R-mm_percpu_wq]
+    0      13 root     [rcu_tasks_kthread]
+    0      14 root     [rcu_tasks_rude_kthread]
+    0      15 root     [rcu_tasks_trace_kthread]
+    0      16 root     [ksoftirqd/0]
+    0      17 root     [rcu_preempt]
+    0      18 root     [rcu_exp_par_gp_kthread_worker/0]
+    0      19 root     [rcu_exp_gp_kthread_worker]
+    0      20 root     [migration/0]
+    0      21 root     [idle_inject/0]
+    0      22 root     [cpuhp/0]
+    0      23 root     [cpuhp/1]
+    0      24 root     [idle_inject/1]
+    0      25 root     [migration/1]
+    0      26 root     [ksoftirqd/1]
+    0      29 root     [kdevtmpfs]
+    0      30 root     [kworker/R-inet_frag_wq]
+    0      32 root     [kauditd]
+    0      33 root     [khungtaskd]
+    0      34 root     [oom_reaper]
+    0      36 root     [kworker/R-writeback]
+    0      37 root     [kcompactd0]
+    0      38 root     [ksmd]
+    0      39 root     [khugepaged]
+    0      40 root     [kworker/R-kintegrityd]
+    0      41 root     [kworker/R-kblockd]
+    0      42 root     [kworker/R-blkcg_punt_bio]
+    0      43 root     [irq/9-acpi]
+    0      45 root     [kworker/R-tpm_dev_wq]
+    0      46 root     [kworker/R-ata_sff]
+    0      47 root     [kworker/R-md]
+    0      48 root     [kworker/R-md_bitmap]
+    0      49 root     [kworker/R-edac-poller]
+    0      50 root     [kworker/R-devfreq_wq]
+    0      51 root     [watchdogd]
+    0      53 root     [kswapd0]
+    0      54 root     [ecryptfs-kthread]
+    0      55 root     [kworker/R-kthrotld]
+    0      56 root     [kworker/R-acpi_thermal_pm]
+    0      58 root     [scsi_eh_0]
+    0      59 root     [kworker/R-scsi_tmf_0]
+    0      60 root     [scsi_eh_1]
+    0      61 root     [kworker/R-scsi_tmf_1]
+    0      65 root     [kworker/R-mld]
+    0      66 root     [kworker/R-ipv6_addrconf]
+    0      73 root     [kworker/R-kstrp]
+    0      88 root     [kworker/R-charger_manager]
+    0     139 root     [scsi_eh_2]
+    0     140 root     [kworker/R-scsi_tmf_2]
+    0     194 root     [jbd2/sda2-8]
+    0     195 root     [kworker/R-ext4-rsv-conversion]
+    0     243 root     /usr/lib/systemd/systemd-journald
+    0     293 root     [irq/18-vmwgfx]
+    0     294 root     [kworker/R-ttm]
+    0     321 root     /usr/lib/systemd/systemd-udevd
+    0     386 root     [psimon]
+  990     406 systemd+ /usr/lib/systemd/systemd-oomd
+  991     411 systemd+ /usr/lib/systemd/systemd-resolved
+  108     636 avahi    avahi-daemon: running [bubunta.local]
+  101     640 message+ @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+  988     643 gnome-r+ /usr/libexec/gnome-remote-desktop-daemon --system
+  987     652 polkitd  /usr/lib/polkit-1/polkitd --no-debug
+    0     655 root     /usr/libexec/power-profiles-daemon
+    0     674 root     /usr/libexec/accounts-daemon
+    0     675 root     /usr/sbin/cron -f -P
+    0     676 root     /usr/libexec/switcheroo-control
+    0     680 root     /usr/lib/systemd/systemd-logind
+    0     682 root     [kworker/R-cryptd]
+    0     692 root     /usr/libexec/udisks2/udisksd
+  108     728 avahi    avahi-daemon: chroot helper
+  102     736 syslog   /usr/sbin/rsyslogd -n -iNONE
+    0     741 root     /usr/sbin/NetworkManager --no-daemon
+    0     742 root     /usr/sbin/wpa_supplicant -u -s -O DIR=/run/wpa_supplicant GROUP=netdev
+    0     782 root     /usr/sbin/ModemManager
+    0     797 root     [kworker/R-iprt-VBoxWQueue]
+    0    1286 root     /usr/sbin/cupsd -l
+    0    1292 root     /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    0    1299 root     /usr/bin/VBoxDRMClient
+    0    1303 root     /usr/sbin/VBoxService --pidfile /var/run/vboxadd-service.sh
+  115    1339 cups-br+ /usr/sbin/cups-browsed
+  106    1349 kernoops /usr/sbin/kerneloops --test
+  106    1352 kernoops /usr/sbin/kerneloops
+    0    1354 root     /usr/sbin/gdm3
+  117    1417 rtkit    /usr/libexec/rtkit-daemon
+  118    1517 colord   /usr/libexec/colord
+    0    1558 root     /usr/libexec/upowerd
+    0    1782 root     [kworker/u9:1-ttm]
+    0    2057 root     [kworker/0:2H-kblockd]
+    0    2089 root     /usr/lib/snapd/snapd
+    0    2798 root     [psimon]
+    0    2840 root     [kworker/u9:2-ttm]
+    0    2873 root     gdm-session-worker [pam/gdm-password]
+ 1000    2890 nastnest /usr/lib/systemd/systemd --user
+ 1000    2891 nastnest (sd-pam)
+ 1000    2902 nastnest /usr/bin/pipewire
+ 1000    2903 nastnest /usr/bin/pipewire -c filter-chain.conf
+ 1000    2906 nastnest /snap/snapd-desktop-integration/253/usr/bin/snapd-desktop-integration
+ 1000    2911 nastnest /usr/bin/wireplumber
+ 1000    2915 nastnest /usr/bin/pipewire-pulse
+ 1000    2917 nastnest /usr/bin/gnome-keyring-daemon --foreground --components=pkcs11,secrets --control-directory=/run/user/1000/keyring
+ 1000    2923 nastnest /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+ 1000    2955 nastnest /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    2964 nastnest /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    3022 nastnest /usr/libexec/gcr-ssh-agent --base-dir /run/user/1000/gcr
+ 1000    3023 nastnest /usr/libexec/gnome-session-ctl --monitor
+ 1000    3033 nastnest /usr/libexec/gvfsd
+ 1000    3045 nastnest /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f
+ 1000    3048 nastnest /usr/libexec/gnome-session-binary --systemd-service --session=ubuntu
+ 1000    3082 nastnest /usr/libexec/at-spi-bus-launcher --launch-immediately
+ 1000    3083 nastnest /usr/bin/gnome-shell
+ 1000    3097 nastnest /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 11 --address=unix:path=/run/user/1000/at-spi/bus
+ 1000    3116 nastnest /usr/libexec/xdg-document-portal
+ 1000    3127 nastnest /usr/libexec/xdg-permission-store
+    0    3140 root     fusermount3 -o rw,nosuid,nodev,fsname=portal,auto_unmount,subtype=portal -- /run/user/1000/doc
+ 1000    3178 nastnest /usr/libexec/at-spi2-registryd --use-gnome-session
+ 1000    3206 nastnest /usr/libexec/gnome-shell-calendar-server
+ 1000    3223 nastnest /usr/libexec/evolution-source-registry
+ 1000    3240 nastnest /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.Shell.Notifications
+ 1000    3250 nastnest /usr/bin/ibus-daemon --panel disable
+ 1000    3251 nastnest /usr/libexec/gsd-a11y-settings
+ 1000    3254 nastnest /usr/libexec/gsd-color
+ 1000    3255 nastnest /usr/libexec/gsd-datetime
+ 1000    3258 nastnest /usr/libexec/gsd-housekeeping
+ 1000    3260 nastnest /usr/libexec/gsd-keyboard
+ 1000    3261 nastnest /usr/libexec/gsd-media-keys
+ 1000    3262 nastnest /usr/libexec/gsd-power
+ 1000    3263 nastnest /usr/libexec/gsd-print-notifications
+ 1000    3265 nastnest /usr/libexec/gsd-rfkill
+ 1000    3266 nastnest /usr/libexec/gsd-screensaver-proxy
+ 1000    3268 nastnest /usr/libexec/gsd-sharing
+ 1000    3272 nastnest /usr/libexec/gsd-smartcard
+ 1000    3273 nastnest /usr/libexec/gsd-sound
+ 1000    3274 nastnest /usr/libexec/gsd-wacom
+ 1000    3289 nastnest /usr/libexec/evolution-data-server/evolution-alarm-notify
+ 1000    3329 nastnest /usr/libexec/gsd-disk-utility-notify
+ 1000    3385 nastnest /usr/bin/Xwayland :0 -rootless -noreset -accessx -core -auth /run/user/1000/.mutter-Xwaylandauth.7TRU52 -listenfd 4 -listenfd 5 -displayfd 6 -initfd 7 -byteswappedclients
+ 1000    3439 nastnest /usr/libexec/ibus-dconf
+ 1000    3442 nastnest /usr/libexec/ibus-extension-gtk3
+ 1000    3450 nastnest /usr/libexec/gvfs-udisks2-volume-monitor
+ 1000    3466 nastnest /usr/libexec/gsd-printer
+ 1000    3467 nastnest /usr/libexec/ibus-portal
+ 1000    3488 nastnest /usr/libexec/goa-daemon
+ 1000    3496 nastnest /snap/snapd-desktop-integration/253/usr/bin/snapd-desktop-integration
+ 1000    3503 nastnest /usr/libexec/gvfs-goa-volume-monitor
+ 1000    3506 nastnest /usr/libexec/evolution-calendar-factory
+ 1000    3516 nastnest /usr/libexec/goa-identity-service
+ 1000    3527 nastnest /usr/libexec/gvfs-gphoto2-volume-monitor
+ 1000    3533 nastnest /usr/libexec/gvfs-mtp-volume-monitor
+ 1000    3540 nastnest /usr/libexec/gvfs-afc-volume-monitor
+ 1000    3546 nastnest /usr/libexec/evolution-addressbook-factory
+ 1000    3598 nastnest /usr/libexec/ibus-engine-simple
+ 1000    3621 nastnest /usr/libexec/dconf-service
+ 1000    3640 nastnest /usr/libexec/gvfsd-metadata
+ 1000    3641 nastnest /usr/libexec/gvfsd-trash --spawner :1.15 /org/gtk/gvfs/exec_spaw/0
+ 1000    3673 nastnest /usr/libexec/tracker-miner-fs-3
+ 1000    3702 nastnest /usr/bin/gjs -m /usr/share/gnome-shell/org.gnome.ScreenSaver
+ 1000    3779 nastnest /usr/libexec/gsd-xsettings
+ 1000    3782 nastnest /usr/libexec/xdg-desktop-portal
+ 1000    3791 nastnest /usr/libexec/xdg-desktop-portal-gnome
+ 1000    3836 nastnest /usr/libexec/ibus-x11
+ 1000    3837 nastnest /usr/libexec/xdg-desktop-portal-gtk
+ 1000    3849 nastnest /usr/libexec/mutter-x11-frames
+ 1000    3851 nastnest /usr/bin/VBoxClient --clipboard
+ 1000    3853 nastnest /usr/bin/VBoxClient --clipboard
+ 1000    3876 nastnest /usr/bin/VBoxClient --vmsvga-session
+ 1000    3877 nastnest /usr/bin/VBoxClient --vmsvga-session
+ 1000    3976 nastnest /usr/bin/update-notifier
+    0    4055 root     [kworker/1:2H-kblockd]
+ 1000    4194 nastnest /snap/code/187/usr/share/code/code --no-sandbox --force-user-env
+ 1000    4196 nastnest /snap/code/187/usr/share/code/code --type=zygote --no-zygote-sandbox --no-sandbox
+ 1000    4197 nastnest /snap/code/187/usr/share/code/code --type=zygote --no-sandbox
+ 1000    4217 nastnest /snap/code/187/usr/share/code/chrome_crashpad_handler --monitor-self-annotation=ptype=crashpad-handler --no-rate-limit --database=/home/nastnest/.config/Code/Crashpad --url=appcenter://code?aid=fba07a4d-84bd-4fc8-a125-9640fc8ce171&uid=24a654bd-f44e-4e6e-b702-17b866ac19f0&iid=24a654bd-f44e-4e6e-b702-17b866ac19f0&sid=24a654bd-f44e-4e6e-b702-17b866ac19f0 --annotation=_companyName=Microsoft --annotation=_productName=VSCode --annotation=_version=1.98.2 --annotation=lsb-release=Ubuntu 24.04.2 LTS --annotation=plat=Linux --annotation=prod=Electron --annotation=ver=34.2.0 --initial-client-fd=44 --shared-client-connection
+ 1000    4254 nastnest /snap/code/187/usr/share/code/code --type=utility --utility-sub-type=network.mojom.NetworkService --lang=en-US --service-sandbox-type=none --no-sandbox --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+ 1000    4290 nastnest /snap/code/187/usr/share/code/code --type=renderer --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --app-path=/snap/code/187/usr/share/code/resources/app --enable-sandbox --enable-blink-features=HighlightAPI --no-sandbox --disable-blink-features=FontMatchingCTMigration,StandardizedBrowserZoom, --lang=en-US --num-raster-threads=1 --renderer-client-id=5 --time-ticks-at-unix-epoch=-1746094993112885 --launch-time-ticks=1830611196 --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version --vscode-window-config=vscode:9c43983b-e5b9-43bf-8ae1-d0c42868c632
+ 1000    4324 nastnest /snap/code/187/usr/share/code/code --type=gpu-process --disable-gpu-sandbox --no-sandbox --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --gpu-preferences=UAAAAAAAAAAgAAAEAAAAAAAAAAAAAAAAAABgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAABAAAAAAAAAAEAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --use-gl=angle --use-angle=swiftshader-webgl --shared-files --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+ 1000    4341 nastnest /snap/code/187/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --no-sandbox --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+ 1000    4342 nastnest /snap/code/187/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --no-sandbox --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+ 1000    4343 nastnest /snap/code/187/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --no-sandbox --dns-result-order=ipv4first --inspect-port=0 --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+ 1000    4396 nastnest /snap/code/187/usr/share/code/code --type=utility --utility-sub-type=node.mojom.NodeService --lang=en-US --service-sandbox-type=none --no-sandbox --crashpad-handler-pid=4217 --enable-crash-reporter=a03746f1-a834-451c-863a-69ff12fa3ac9,no_channel --user-data-dir=/home/nastnest/.config/Code --standard-schemes=vscode-webview,vscode-file --secure-schemes=vscode-webview,vscode-file --cors-schemes=vscode-webview,vscode-file --fetch-schemes=vscode-webview,vscode-file --service-worker-schemes=vscode-webview --code-cache-schemes=vscode-webview,vscode-file --shared-files=v8_context_snapshot_data:100 --field-trial-handle=3,i,17885430141354615950,2833151942579640275,262144 --disable-features=CalculateNativeWinOcclusion,PlzDedicatedWorker,SpareRendererForSitePerProcess --variations-seed-version
+    0    4478 root     [kworker/0:1H]
+    0    4490 root     /usr/libexec/fwupd/fwupd
+    0    4533 root     [kworker/u8:2-flush-8:0]
+    0    6735 root     [kworker/1:0H-kblockd]
+ 1000    7517 nastnest /usr/bin/bash --init-file /snap/code/187/usr/share/code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+    0    7970 root     [kworker/u8:1-events_unbound]
+    0    8077 root     [kworker/1:1-events]
+    0    8196 root     [kworker/1:0-cgroup_destroy]
+    0    8203 root     [kworker/0:2-cgroup_destroy]
+    0    8204 root     [kworker/u8:0-flush-8:0]
+    0    8211 root     [kworker/0:1-events]
+ 1000    8265 nastnest gjs /usr/share/gnome-shell/extensions/ding@rastersoft.com/app/ding.js -E -P /usr/share/gnome-shell/extensions/ding@rastersoft.com/app
+    0    8316 root     [kworker/u8:3-events_unbound]
+    0    8320 root     [kworker/1:2-events]
+ 1000    8501 nastnest ps -eo uid,pid,user,cmd
+Чт 01 мая 2025 15:56:23 MSK
+
+# Минимальный UID = 0 - пользователь root
+# Минимальный PID = 1 - /sbin/init splash
+# Максимальный PID (возможный и который используется сейчас):
+nastnest@bubunta:~$ cat /proc/sys/kernel/pid_max
+4194304
+nastnest@bubunta:~$ ps -eo uid,pid,user,cmd | tail -1
+ 1000    9448 nastnest tail -1
+Чт 01 мая 2025 16:00:31 MSK
+
+# 1.4. Множество системных процессов
+
+# Системные процессы запускаются от root - UID = 0, PPID = 0/1/2
+# Важные системные процессы:
+# systemd (PID=1) — родитель всех процессов, управляет загрузкой и сервисами
+# kthreadd (PID=2) — ядерный поток, создаёт другие потоки ядра
+
+nastnest@bubunta:~$ -eo uid,ppid,pid,user,comm | awk '$1 == 0 && $2 < 3'
+    0       0       1 root     systemd
+    0       0       2 root     kthreadd
+    0       2       3 root     pool_workqueue_release
+    0       2       4 root     kworker/R-rcu_gp
+    0       2       5 root     kworker/R-sync_wq
+    0       2       6 root     kworker/R-slub_flushwq
+    0       2       7 root     kworker/R-netns
+    0       2       8 root     kworker/0:0-events
+    0       2      12 root     kworker/R-mm_percpu_wq
+    0       2      13 root     rcu_tasks_kthread
+    0       2      14 root     rcu_tasks_rude_kthread
+    0       2      15 root     rcu_tasks_trace_kthread
+    0       2      16 root     ksoftirqd/0
+    0       2      17 root     rcu_preempt
+    0       2      18 root     rcu_exp_par_gp_kthread_worker/0
+    0       2      19 root     rcu_exp_gp_kthread_worker
+    0       2      20 root     migration/0
+    0       2      21 root     idle_inject/0
+    0       2      22 root     cpuhp/0
+    0       2      23 root     cpuhp/1
+    0       2      24 root     idle_inject/1
+    0       2      25 root     migration/1
+    0       2      26 root     ksoftirqd/1
+    0       2      29 root     kdevtmpfs
+    0       2      30 root     kworker/R-inet_frag_wq
+    0       2      32 root     kauditd
+    0       2      33 root     khungtaskd
+    0       2      34 root     oom_reaper
+    0       2      36 root     kworker/R-writeback
+    0       2      37 root     kcompactd0
+    0       2      38 root     ksmd
+    0       2      39 root     khugepaged
+    0       2      40 root     kworker/R-kintegrityd
+    0       2      41 root     kworker/R-kblockd
+    0       2      42 root     kworker/R-blkcg_punt_bio
+    0       2      43 root     irq/9-acpi
+    0       2      45 root     kworker/R-tpm_dev_wq
+    0       2      46 root     kworker/R-ata_sff
+    0       2      47 root     kworker/R-md
+    0       2      48 root     kworker/R-md_bitmap
+    0       2      49 root     kworker/R-edac-poller
+    0       2      50 root     kworker/R-devfreq_wq
+    0       2      51 root     watchdogd
+    0       2      53 root     kswapd0
+    0       2      54 root     ecryptfs-kthread
+    0       2      55 root     kworker/R-kthrotld
+    0       2      56 root     kworker/R-acpi_thermal_pm
+    0       2      58 root     scsi_eh_0
+    0       2      59 root     kworker/R-scsi_tmf_0
+    0       2      60 root     scsi_eh_1
+    0       2      61 root     kworker/R-scsi_tmf_1
+    0       2      65 root     kworker/R-mld
+    0       2      66 root     kworker/R-ipv6_addrconf
+    0       2      73 root     kworker/R-kstrp
+    0       2      88 root     kworker/R-charger_manager
+    0       2     139 root     scsi_eh_2
+    0       2     140 root     kworker/R-scsi_tmf_2
+    0       2     194 root     jbd2/sda2-8
+    0       2     195 root     kworker/R-ext4-rsv-conversion
+    0       1     243 root     systemd-journal
+    0       2     293 root     irq/18-vmwgfx
+    0       2     294 root     kworker/R-ttm
+    0       1     321 root     systemd-udevd
+    0       2     386 root     psimon
+    0       1     655 root     power-profiles-
+    0       1     674 root     accounts-daemon
+    0       1     675 root     cron
+    0       1     676 root     switcheroo-cont
+    0       1     680 root     systemd-logind
+    0       2     682 root     kworker/R-cryptd
+    0       1     692 root     udisksd
+    0       1     741 root     NetworkManager
+    0       1     742 root     wpa_supplicant
+    0       1     782 root     ModemManager
+    0       2     797 root     kworker/R-iprt-VBoxWQueue
+    0       1    1286 root     cupsd
+    0       1    1292 root     unattended-upgr
+    0       1    1299 root     VBoxDRMClient
+    0       1    1303 root     VBoxService
+    0       1    1354 root     gdm3
+    0       1    1558 root     upowerd
+    0       2    2057 root     kworker/0:2H-kblockd
+    0       1    2089 root     snapd
+    0       2    2798 root     psimon
+    0       2    2840 root     kworker/u9:2-ttm
+    0       2    4055 root     kworker/1:2H-kblockd
+    0       2    4478 root     kworker/0:1H
+    0       1    4490 root     fwupd
+    0       2    6735 root     kworker/1:0H-kblockd
+    0       2    8204 root     kworker/u8:0-events_unbound
+    0       2    8211 root     kworker/0:1-events
+    0       2    8320 root     kworker/1:2-events
+    0       2    8964 root     kworker/u9:0
+    0       2    9006 root     kworker/1:3
+    0       2    9165 root     kworker/u8:4-flush-8:0
+    0       2    9166 root     kworker/u8:5-flush-8:0
+    0       2    9505 root     kworker/u8:2-events_power_efficient
+    0       2    9515 root     kworker/0:2
+    0       2    9726 root     kworker/u8:1-flush-8:0
+    0       2    9727 root     kworker/u8:3
+    Чт 01 мая 2025 16:17:54 MSK
+
+# 1.5. Характеристика процесса прародителя
+
+nastnest@bubunta:~$ pstree -ps $$ | head -5
+systemd(1)---systemd(2890)---code(8639)---code(8777)---bash(8860)-+-head(10179)
+                                                                  `-pstree(10178)
+Чт 01 мая 2025 16:31:31 MSK
+
+nastnest@bubunta:~$ cat /proc/2890/status
+Name:	systemd
+Umask:	0002
+State:	S (sleeping)
+Tgid:	2890
+Ngid:	0
+Pid:	2890
+PPid:	1
+TracerPid:	0
+Uid:	1000	1000	1000	1000
+Gid:	1000	1000	1000	1000
+FDSize:	512
+Groups:	4 24 27 30 46 100 114 1000 
+NStgid:	2890
+NSpid:	2890
+NSpgid:	2890
+NSsid:	2890
+Kthread:	0
+VmPeak:	   21448 kB
+VmSize:	   21200 kB
+VmLck:	       0 kB
+VmPin:	       0 kB
+VmHWM:	   12668 kB
+VmRSS:	   12516 kB
+RssAnon:	    3120 kB
+RssFile:	    9396 kB
+RssShmem:	       0 kB
+VmData:	    2176 kB
+VmStk:	     132 kB
+VmExe:	      44 kB
+VmLib:	   12188 kB
+VmPTE:	      84 kB
+VmSwap:	       0 kB
+HugetlbPages:	       0 kB
+CoreDumping:	0
+THP_enabled:	1
+untag_mask:	0xffffffffffffffff
+Threads:	1
+SigQ:	0/11590
+SigPnd:	0000000000000000
+ShdPnd:	0000000000000000
+SigBlk:	7fefc1fe28014a03
+SigIgn:	0000000000001000
+SigCgt:	0000000000000000
+CapInh:	0000000800000000
+CapPrm:	0000000800000000
+CapEff:	0000000800000000
+CapBnd:	000001ffffffffff
+CapAmb:	0000000000000000
+NoNewPrivs:	0
+Seccomp:	0
+Seccomp_filters:	0
+Speculation_Store_Bypass:	not vulnerable
+SpeculationIndirectBranch:	always enabled
+Cpus_allowed:	3
+Cpus_allowed_list:	0-1
+Mems_allowed:	00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000000,00000001
+Mems_allowed_list:	0
+voluntary_ctxt_switches:	1930
+nonvoluntary_ctxt_switches:	1348
+x86_Thread_features:	
+x86_Thread_features_locked:	
+Чт 01 мая 2025 16:39:44 MSK
+
+nastnest@bubunta:~$ cat /proc/2890/cmdline
+/usr/lib/systemd/systemd --user 
+nastnest@bubunta:~$ sudo cat /proc/2890/environ
+LANG=ru_RU.UTF-8 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/snap/bin NOTIFY_SOCKET=/run/systemd/notify USER=nastnest LOGNAME=nastnest HOME=/home/nastnest SHELL=/bin/bash INVOCATION_ID=d39aed2fd6ed439c83c57c255362adc0 JOURNAL_STREAM=9:19469 SYSTEMD_EXEC_PID=2890 XDG_RUNTIME_DIR=/run/user/1000 
+Чт 01 мая 2025 16:40:50 MSK
+
+# systemd с PID 2890 является менеджером пользовательского сеанса
+# Управляет процессами, связанными с входом в систему
+# Родитель — главный systemd (PPID=1)
+
+
+# ЗАДАНИЕ 2. Порождение и запуск процессов
+
+# 2.1. Псевдораспараллеливание вычислений
+
+nastnest@bubunta:~$ gcc prob2_1_1.c && ./a.out
+Child process:
+PID: 11319
+PPID: 11318
+1+2+3+4 = 10
+Process finished (PID: 11319)
+Parent process:
+PID: 11318
+Child PID: 11319
+1^2+2^2+3^2+4^2 = 30
+Process finished (PID: 11318)
+Пт 02 мая 2025 01:00:34 MSK
+# Вывод: процессы имеют свою копию окружения и разные адресные пространства
+
+# Добавим вывод в цикле и задержку
+nastnest@bubunta:~$ gcc prob2_1_2.c && ./a.out
+Parent process:
+PID: 11555
+Child PID: 11556
+Step 1, parent
+Child process:
+PID: 11556
+PPID: 11555
+Step 1, child
+Step 2, child
+Step 2, parent
+Step 3, parent
+Step 3, child
+Step 4, parent
+Step 4, child
+Step 5, parent
+Step 5, child
+1^2+2^2+3^2+4^2 = 30
+1+2+3+4 = 10
+Process finished (PID: 11556)
+Process finished (PID: 11555)
+Пт 02 мая 2025 01:07:29 MSK
+# Вывод: изменения в одном процессе не влияют на другой,
+# процессы выполняются параллельно, конкурируя за процессорное время
+
+# 2.2. Программы родителя и потомка
+
+nastnest@bubunta:~$ gcc prob2_2_son.c -o son
+nastnest@bubunta:~$ gcc prob2_2_father.c -o father
+nastnest@bubunta:~$ ./father
+Parent process:
+PID: 12922
+Child process:
+PID: 12925
+PPID: 12922
+Child process finished
+Parent process finished
+Пт 02 мая 2025 03:07:03 MSK
+nastnest@bubunta:~$ cat prob2/*.txt
+# 2_father_son.txt
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    8860    8777  0  80   0 -  2164 do_wai pts/0    00:00:00 bash
+0 S  1000   12922    8860  0  80   0 -   671 do_wai pts/0    00:00:00 father
+0 S  1000   12925   12922  0  80   0 -   671 do_wai pts/0    00:00:00 son
+0 S  1000   12926   12922  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 S  1000   12927   12925  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 R  1000   12928   12926 99  80   0 -  2801 -      pts/0    00:00:00 ps
+0 R  1000   12929   12927 99  80   0 -  2768 -      pts/0    00:00:00 ps
+# 2_father_start.txt
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    8860    8777  0  80   0 -  2164 do_wai pts/0    00:00:00 bash
+0 S  1000   12922    8860  0  80   0 -   671 do_wai pts/0    00:00:00 father
+0 S  1000   12923   12922  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 R  1000   12924   12923 99  80   0 -  2801 -      pts/0    00:00:00 ps
+# 2_father_stop.txt
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    8860    8777  0  80   0 -  2164 do_wai pts/0    00:00:00 bash
+0 S  1000   12922    8860  0  80   0 -   671 do_wai pts/0    00:00:00 father
+0 S  1000   12932   12922  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 R  1000   12933   12932 99  80   0 -  2801 -      pts/0    00:00:00 ps
+# 2_son_start.txt
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    8860    8777  0  80   0 -  2164 do_wai pts/0    00:00:00 bash
+0 S  1000   12922    8860  0  80   0 -   671 do_wai pts/0    00:00:00 father
+0 S  1000   12925   12922  0  80   0 -   671 do_wai pts/0    00:00:00 son
+0 S  1000   12927   12925  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 R  1000   12929   12927 99  80   0 -  2801 -      pts/0    00:00:00 ps
+# 2_son_stop.txt
+F S   UID     PID    PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000    8860    8777  0  80   0 -  2164 do_wai pts/0    00:00:00 bash
+0 S  1000   12922    8860  0  80   0 -   671 do_wai pts/0    00:00:00 father
+0 S  1000   12925   12922  0  80   0 -   671 do_wai pts/0    00:00:00 son
+0 S  1000   12930   12925  0  80   0 -   701 do_wai pts/0    00:00:00 sh
+0 R  1000   12931   12930 99  80   0 -  2801 -      pts/0    00:00:00 ps
+Пт 02 мая 2025 03:17:48 MSK
+
+nastnest@bubunta:~$ ./father &
+[1] 13322
+nastnest@bubunta:~$ # В фоновом режиме
+Parent process:
+PID: 13322
+Child process:
+PID: 13326
+PPID: 13322
+Child process finished
+Parent process finished
+
+[1]+  Завершён        ./father
+Пт 02 мая 2025 03:21:09 MSK
+
+# 2.3. Создание процессов
+
+nastnest@bubunta:~$ gcc prob2_3.c && ./a.out
+Эксперименты с семейством exec()
+
+Тест 0:execl()
+итого 320
+drwxrwxr-x 6 nastnest nastnest  4096 мая  4 15:10 .
+drwxr-xr-x 5 nastnest nastnest  4096 апр 29 04:29 ..
+-rwxrwxr-x 1 nastnest nastnest 16744 мая  4 15:10 a.out
+-rwxrwxr-x 1 nastnest nastnest 16304 мая  2 03:15 father
+-rw-rw-r-- 1 nastnest nastnest 58522 мая  4 14:45 lab2.log
+-rw-rw-r-- 1 nastnest nastnest 38979 мая  4 04:33 labsys.log
+-rw------- 1 nastnest nastnest     0 мая  1 14:28 nohup.out
+drwxrwxr-x 2 nastnest nastnest  4096 мая  2 03:33 prob2
+-rw-rw-r-- 1 nastnest nastnest  1064 мая  4 14:53 prob2_1_1.c
+-rw-rw-r-- 1 nastnest nastnest  1245 мая  4 14:56 prob2_1_2.c
+-rw-rw-r-- 1 nastnest nastnest  1001 мая  4 15:00 prob2_2_father.c
+-rw-rw-r-- 1 nastnest nastnest   631 мая  4 15:02 prob2_2_son.c
+-rw-rw-r-- 1 nastnest nastnest  2929 мая  4 15:10 prob2_3.c
+-rw-rw-r-- 1 nastnest nastnest  2819 мая  4 14:44 prob2_4.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 01:19 prob3
+-rw-rw-r-- 1 nastnest nastnest  1176 мая  4 01:28 prob3_1_father.c
+-rw-rw-r-- 1 nastnest nastnest   195 мая  4 00:54 prob3_1_son_1.c
+-rw-rw-r-- 1 nastnest nastnest   231 мая  4 00:54 prob3_1_son_2.c
+-rw-rw-r-- 1 nastnest nastnest   387 мая  4 01:09 prob3_1_son_3.c
+-rw-rw-r-- 1 nastnest nastnest  1263 мая  4 02:03 prob3_2.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 02:59 prob4
+-rw-rw-r-- 1 nastnest nastnest  1917 мая  4 03:38 prob4_1.c
+-rw-rw-r-- 1 nastnest nastnest  2270 мая  4 03:54 prob4_3.c
+-rw-rw-r-- 1 nastnest nastnest   730 мая  4 05:04 prob4_4.c
+-rw-rw-r-- 1 nastnest nastnest   688 мая  4 05:05 prob5_1.c
+-rw-rw-r-- 1 nastnest nastnest    85 мая  4 05:34 prob5_2.c
+-rw-rw-r-- 1 nastnest nastnest  1845 мая  4 11:24 prob5_3.c
+-rw-rw-r-- 1 nastnest nastnest  2135 мая  4 11:48 prob5_4.c
+-rw-rw-r-- 1 nastnest nastnest  1211 мая  4 12:28 prob5_5.c
+-rw-rw-r-- 1 nastnest nastnest  2439 мая  4 12:51 prob5_6.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 14:20 prob6
+-rw-rw-r-- 1 nastnest nastnest   775 мая  4 13:44 prob6_1.c
+-rw-rw-r-- 1 nastnest nastnest  1212 мая  4 13:59 prob6_2.c
+-rw-rw-r-- 1 nastnest nastnest   514 мая  4 14:08 prob6_3.c
+-rw-rw-r-- 1 nastnest nastnest  2237 мая  4 14:27 prob6_4.c
+-rwxrwxr-x 1 nastnest nastnest 16216 мая  2 02:58 son
+-rwxrwxr-x 1 nastnest nastnest 16056 мая  4 01:05 son_1
+-rwxrwxr-x 1 nastnest nastnest 16096 мая  4 01:05 son_2
+-rwxrwxr-x 1 nastnest nastnest 16136 мая  4 01:05 son_3
+Тест 0: дочерний процесс завершился со статусом 0
+
+Тест 1:execlp()
+итого 320
+drwxrwxr-x 6 nastnest nastnest  4096 мая  4 15:10 .
+drwxr-xr-x 5 nastnest nastnest  4096 апр 29 04:29 ..
+-rwxrwxr-x 1 nastnest nastnest 16744 мая  4 15:10 a.out
+-rwxrwxr-x 1 nastnest nastnest 16304 мая  2 03:15 father
+-rw-rw-r-- 1 nastnest nastnest 58522 мая  4 14:45 lab2.log
+-rw-rw-r-- 1 nastnest nastnest 38979 мая  4 04:33 labsys.log
+-rw------- 1 nastnest nastnest     0 мая  1 14:28 nohup.out
+drwxrwxr-x 2 nastnest nastnest  4096 мая  2 03:33 prob2
+-rw-rw-r-- 1 nastnest nastnest  1064 мая  4 14:53 prob2_1_1.c
+-rw-rw-r-- 1 nastnest nastnest  1245 мая  4 14:56 prob2_1_2.c
+-rw-rw-r-- 1 nastnest nastnest  1001 мая  4 15:00 prob2_2_father.c
+-rw-rw-r-- 1 nastnest nastnest   631 мая  4 15:02 prob2_2_son.c
+-rw-rw-r-- 1 nastnest nastnest  2929 мая  4 15:10 prob2_3.c
+-rw-rw-r-- 1 nastnest nastnest  2819 мая  4 14:44 prob2_4.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 01:19 prob3
+-rw-rw-r-- 1 nastnest nastnest  1176 мая  4 01:28 prob3_1_father.c
+-rw-rw-r-- 1 nastnest nastnest   195 мая  4 00:54 prob3_1_son_1.c
+-rw-rw-r-- 1 nastnest nastnest   231 мая  4 00:54 prob3_1_son_2.c
+-rw-rw-r-- 1 nastnest nastnest   387 мая  4 01:09 prob3_1_son_3.c
+-rw-rw-r-- 1 nastnest nastnest  1263 мая  4 02:03 prob3_2.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 02:59 prob4
+-rw-rw-r-- 1 nastnest nastnest  1917 мая  4 03:38 prob4_1.c
+-rw-rw-r-- 1 nastnest nastnest  2270 мая  4 03:54 prob4_3.c
+-rw-rw-r-- 1 nastnest nastnest   730 мая  4 05:04 prob4_4.c
+-rw-rw-r-- 1 nastnest nastnest   688 мая  4 05:05 prob5_1.c
+-rw-rw-r-- 1 nastnest nastnest    85 мая  4 05:34 prob5_2.c
+-rw-rw-r-- 1 nastnest nastnest  1845 мая  4 11:24 prob5_3.c
+-rw-rw-r-- 1 nastnest nastnest  2135 мая  4 11:48 prob5_4.c
+-rw-rw-r-- 1 nastnest nastnest  1211 мая  4 12:28 prob5_5.c
+-rw-rw-r-- 1 nastnest nastnest  2439 мая  4 12:51 prob5_6.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 14:20 prob6
+-rw-rw-r-- 1 nastnest nastnest   775 мая  4 13:44 prob6_1.c
+-rw-rw-r-- 1 nastnest nastnest  1212 мая  4 13:59 prob6_2.c
+-rw-rw-r-- 1 nastnest nastnest   514 мая  4 14:08 prob6_3.c
+-rw-rw-r-- 1 nastnest nastnest  2237 мая  4 14:27 prob6_4.c
+-rwxrwxr-x 1 nastnest nastnest 16216 мая  2 02:58 son
+-rwxrwxr-x 1 nastnest nastnest 16056 мая  4 01:05 son_1
+-rwxrwxr-x 1 nastnest nastnest 16096 мая  4 01:05 son_2
+-rwxrwxr-x 1 nastnest nastnest 16136 мая  4 01:05 son_3
+Тест 1: дочерний процесс завершился со статусом 0
+
+Тест 2:execle()
+total 320
+drwxrwxr-x 6 nastnest nastnest  4096 May  4 15:10 .
+drwxr-xr-x 5 nastnest nastnest  4096 Apr 29 04:29 ..
+-rwxrwxr-x 1 nastnest nastnest 16744 May  4 15:10 a.out
+-rwxrwxr-x 1 nastnest nastnest 16304 May  2 03:15 father
+-rw-rw-r-- 1 nastnest nastnest 58522 May  4 14:45 lab2.log
+-rw-rw-r-- 1 nastnest nastnest 38979 May  4 04:33 labsys.log
+-rw------- 1 nastnest nastnest     0 May  1 14:28 nohup.out
+drwxrwxr-x 2 nastnest nastnest  4096 May  2 03:33 prob2
+-rw-rw-r-- 1 nastnest nastnest  1064 May  4 14:53 prob2_1_1.c
+-rw-rw-r-- 1 nastnest nastnest  1245 May  4 14:56 prob2_1_2.c
+-rw-rw-r-- 1 nastnest nastnest  1001 May  4 15:00 prob2_2_father.c
+-rw-rw-r-- 1 nastnest nastnest   631 May  4 15:02 prob2_2_son.c
+-rw-rw-r-- 1 nastnest nastnest  2929 May  4 15:10 prob2_3.c
+-rw-rw-r-- 1 nastnest nastnest  2819 May  4 14:44 prob2_4.c
+drwxrwxr-x 2 nastnest nastnest  4096 May  4 01:19 prob3
+-rw-rw-r-- 1 nastnest nastnest  1176 May  4 01:28 prob3_1_father.c
+-rw-rw-r-- 1 nastnest nastnest   195 May  4 00:54 prob3_1_son_1.c
+-rw-rw-r-- 1 nastnest nastnest   231 May  4 00:54 prob3_1_son_2.c
+-rw-rw-r-- 1 nastnest nastnest   387 May  4 01:09 prob3_1_son_3.c
+-rw-rw-r-- 1 nastnest nastnest  1263 May  4 02:03 prob3_2.c
+drwxrwxr-x 2 nastnest nastnest  4096 May  4 02:59 prob4
+-rw-rw-r-- 1 nastnest nastnest  1917 May  4 03:38 prob4_1.c
+-rw-rw-r-- 1 nastnest nastnest  2270 May  4 03:54 prob4_3.c
+-rw-rw-r-- 1 nastnest nastnest   730 May  4 05:04 prob4_4.c
+-rw-rw-r-- 1 nastnest nastnest   688 May  4 05:05 prob5_1.c
+-rw-rw-r-- 1 nastnest nastnest    85 May  4 05:34 prob5_2.c
+-rw-rw-r-- 1 nastnest nastnest  1845 May  4 11:24 prob5_3.c
+-rw-rw-r-- 1 nastnest nastnest  2135 May  4 11:48 prob5_4.c
+-rw-rw-r-- 1 nastnest nastnest  1211 May  4 12:28 prob5_5.c
+-rw-rw-r-- 1 nastnest nastnest  2439 May  4 12:51 prob5_6.c
+drwxrwxr-x 2 nastnest nastnest  4096 May  4 14:20 prob6
+-rw-rw-r-- 1 nastnest nastnest   775 May  4 13:44 prob6_1.c
+-rw-rw-r-- 1 nastnest nastnest  1212 May  4 13:59 prob6_2.c
+-rw-rw-r-- 1 nastnest nastnest   514 May  4 14:08 prob6_3.c
+-rw-rw-r-- 1 nastnest nastnest  2237 May  4 14:27 prob6_4.c
+-rwxrwxr-x 1 nastnest nastnest 16216 May  2 02:58 son
+-rwxrwxr-x 1 nastnest nastnest 16056 May  4 01:05 son_1
+-rwxrwxr-x 1 nastnest nastnest 16096 May  4 01:05 son_2
+-rwxrwxr-x 1 nastnest nastnest 16136 May  4 01:05 son_3
+Тест 2: дочерний процесс завершился со статусом 0
+
+Тест 3:execv()
+итого 320
+drwxrwxr-x 6 nastnest nastnest  4096 мая  4 15:10 .
+drwxr-xr-x 5 nastnest nastnest  4096 апр 29 04:29 ..
+-rwxrwxr-x 1 nastnest nastnest 16744 мая  4 15:10 a.out
+-rwxrwxr-x 1 nastnest nastnest 16304 мая  2 03:15 father
+-rw-rw-r-- 1 nastnest nastnest 58522 мая  4 14:45 lab2.log
+-rw-rw-r-- 1 nastnest nastnest 38979 мая  4 04:33 labsys.log
+-rw------- 1 nastnest nastnest     0 мая  1 14:28 nohup.out
+drwxrwxr-x 2 nastnest nastnest  4096 мая  2 03:33 prob2
+-rw-rw-r-- 1 nastnest nastnest  1064 мая  4 14:53 prob2_1_1.c
+-rw-rw-r-- 1 nastnest nastnest  1245 мая  4 14:56 prob2_1_2.c
+-rw-rw-r-- 1 nastnest nastnest  1001 мая  4 15:00 prob2_2_father.c
+-rw-rw-r-- 1 nastnest nastnest   631 мая  4 15:02 prob2_2_son.c
+-rw-rw-r-- 1 nastnest nastnest  2929 мая  4 15:10 prob2_3.c
+-rw-rw-r-- 1 nastnest nastnest  2819 мая  4 14:44 prob2_4.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 01:19 prob3
+-rw-rw-r-- 1 nastnest nastnest  1176 мая  4 01:28 prob3_1_father.c
+-rw-rw-r-- 1 nastnest nastnest   195 мая  4 00:54 prob3_1_son_1.c
+-rw-rw-r-- 1 nastnest nastnest   231 мая  4 00:54 prob3_1_son_2.c
+-rw-rw-r-- 1 nastnest nastnest   387 мая  4 01:09 prob3_1_son_3.c
+-rw-rw-r-- 1 nastnest nastnest  1263 мая  4 02:03 prob3_2.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 02:59 prob4
+-rw-rw-r-- 1 nastnest nastnest  1917 мая  4 03:38 prob4_1.c
+-rw-rw-r-- 1 nastnest nastnest  2270 мая  4 03:54 prob4_3.c
+-rw-rw-r-- 1 nastnest nastnest   730 мая  4 05:04 prob4_4.c
+-rw-rw-r-- 1 nastnest nastnest   688 мая  4 05:05 prob5_1.c
+-rw-rw-r-- 1 nastnest nastnest    85 мая  4 05:34 prob5_2.c
+-rw-rw-r-- 1 nastnest nastnest  1845 мая  4 11:24 prob5_3.c
+-rw-rw-r-- 1 nastnest nastnest  2135 мая  4 11:48 prob5_4.c
+-rw-rw-r-- 1 nastnest nastnest  1211 мая  4 12:28 prob5_5.c
+-rw-rw-r-- 1 nastnest nastnest  2439 мая  4 12:51 prob5_6.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 14:20 prob6
+-rw-rw-r-- 1 nastnest nastnest   775 мая  4 13:44 prob6_1.c
+-rw-rw-r-- 1 nastnest nastnest  1212 мая  4 13:59 prob6_2.c
+-rw-rw-r-- 1 nastnest nastnest   514 мая  4 14:08 prob6_3.c
+-rw-rw-r-- 1 nastnest nastnest  2237 мая  4 14:27 prob6_4.c
+-rwxrwxr-x 1 nastnest nastnest 16216 мая  2 02:58 son
+-rwxrwxr-x 1 nastnest nastnest 16056 мая  4 01:05 son_1
+-rwxrwxr-x 1 nastnest nastnest 16096 мая  4 01:05 son_2
+-rwxrwxr-x 1 nastnest nastnest 16136 мая  4 01:05 son_3
+Тест 3: дочерний процесс завершился со статусом 0
+
+Тест 4:execvp()
+итого 320
+drwxrwxr-x 6 nastnest nastnest  4096 мая  4 15:10 .
+drwxr-xr-x 5 nastnest nastnest  4096 апр 29 04:29 ..
+-rwxrwxr-x 1 nastnest nastnest 16744 мая  4 15:10 a.out
+-rwxrwxr-x 1 nastnest nastnest 16304 мая  2 03:15 father
+-rw-rw-r-- 1 nastnest nastnest 58522 мая  4 14:45 lab2.log
+-rw-rw-r-- 1 nastnest nastnest 38979 мая  4 04:33 labsys.log
+-rw------- 1 nastnest nastnest     0 мая  1 14:28 nohup.out
+drwxrwxr-x 2 nastnest nastnest  4096 мая  2 03:33 prob2
+-rw-rw-r-- 1 nastnest nastnest  1064 мая  4 14:53 prob2_1_1.c
+-rw-rw-r-- 1 nastnest nastnest  1245 мая  4 14:56 prob2_1_2.c
+-rw-rw-r-- 1 nastnest nastnest  1001 мая  4 15:00 prob2_2_father.c
+-rw-rw-r-- 1 nastnest nastnest   631 мая  4 15:02 prob2_2_son.c
+-rw-rw-r-- 1 nastnest nastnest  2929 мая  4 15:10 prob2_3.c
+-rw-rw-r-- 1 nastnest nastnest  2819 мая  4 14:44 prob2_4.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 01:19 prob3
+-rw-rw-r-- 1 nastnest nastnest  1176 мая  4 01:28 prob3_1_father.c
+-rw-rw-r-- 1 nastnest nastnest   195 мая  4 00:54 prob3_1_son_1.c
+-rw-rw-r-- 1 nastnest nastnest   231 мая  4 00:54 prob3_1_son_2.c
+-rw-rw-r-- 1 nastnest nastnest   387 мая  4 01:09 prob3_1_son_3.c
+-rw-rw-r-- 1 nastnest nastnest  1263 мая  4 02:03 prob3_2.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 02:59 prob4
+-rw-rw-r-- 1 nastnest nastnest  1917 мая  4 03:38 prob4_1.c
+-rw-rw-r-- 1 nastnest nastnest  2270 мая  4 03:54 prob4_3.c
+-rw-rw-r-- 1 nastnest nastnest   730 мая  4 05:04 prob4_4.c
+-rw-rw-r-- 1 nastnest nastnest   688 мая  4 05:05 prob5_1.c
+-rw-rw-r-- 1 nastnest nastnest    85 мая  4 05:34 prob5_2.c
+-rw-rw-r-- 1 nastnest nastnest  1845 мая  4 11:24 prob5_3.c
+-rw-rw-r-- 1 nastnest nastnest  2135 мая  4 11:48 prob5_4.c
+-rw-rw-r-- 1 nastnest nastnest  1211 мая  4 12:28 prob5_5.c
+-rw-rw-r-- 1 nastnest nastnest  2439 мая  4 12:51 prob5_6.c
+drwxrwxr-x 2 nastnest nastnest  4096 мая  4 14:20 prob6
+-rw-rw-r-- 1 nastnest nastnest   775 мая  4 13:44 prob6_1.c
+-rw-rw-r-- 1 nastnest nastnest  1212 мая  4 13:59 prob6_2.c
+-rw-rw-r-- 1 nastnest nastnest   514 мая  4 14:08 prob6_3.c
+-rw-rw-r-- 1 nastnest nastnest  2237 мая  4 14:27 prob6_4.c
+-rwxrwxr-x 1 nastnest nastnest 16216 мая  2 02:58 son
+-rwxrwxr-x 1 nastnest nastnest 16056 мая  4 01:05 son_1
+-rwxrwxr-x 1 nastnest nastnest 16096 мая  4 01:05 son_2
+-rwxrwxr-x 1 nastnest nastnest 16136 мая  4 01:05 son_3
+Тест 4: дочерний процесс завершился со статусом 0
+
+Все тесты завершены
+Вс 04 мая 2025 15:12:40 MSK
+
+# 2.4. Завершение процессов
+
+nastnest@bubunta:~$ gcc prob2_4.c && ./a.out
+Запуск процесса-потомка и ожидание завершения
+Родитель ожидает завершения потомка (PID родителя: 8739)...
+Текущие процессы:
+   8739    4177 S a.out
+   8740    8739 S a.out
+Потомок завершил работу
+Родитель: потомок завершился, родитель выходит
+Текущие процессы:
+   8739    4177 S a.out
+
+Завершение родителя перед потомком
+PID родителя: 8752, завершается сейчас...
+Потомок запущен (PID: 8753, Исходный PPID: 8752)
+Новый PPID потомка после завершения родителя: 1886
+Текущие процессы:
+   8739    4177 S a.out
+   8753    1886 S a.out
+
+Появление процесса-зомби
+Родитель не ожидает потомка (PID: 8739)...
+Потомок запущен (PID: 8757, станет зомби)
+Существует процесс-зомби:
+Текущие процессы:
+   8739    4177 S a.out
+   8757    8739 Z a.out
+После wait() - зомби удален:
+Текущие процессы:
+   8739    4177 S a.out
+Родитель завершен
+Пт 02 мая 2025 05:45:30 MSK
+
+# ЗАДАНИЕ 3. Управление процессами посредством сигналов
+
+# 3.1. Сигналы: по умолчанию, игнорирование, перехватывание и обработка
+
+nastnest@bubunta:~$ gcc prob3_1_son_1.c -o son_1
+nastnest@bubunta:~$ gcc prob3_1_son_2.c -o son_2
+nastnest@bubunta:~$ gcc prob3_1_son_3.c -o son_3
+nastnest@bubunta:~$ gcc prob3_1_father.c && ./a.out
+
+Father process started (PID: 16627)
+son1 (PID: 16628) started - default handler
+son3 (PID: 16630) started - will handle SIGUSR1 with custom handler
+son2 (PID: 16629) started - ignore
+
+Father: Sending SIGUSR1 to son1 (default handler)
+Father: Sending SIGUSR1 to son2 (ignore)
+Father: Sending SIGUSR1 to son3 (custom handler)
+son3 (PID: 16630) received SIGUSR1 signal
+
+Father: Stop son1, son2, son3
+Father process finished
+
+Before signal:
+  UID     PID          PENDING          BLOCKED          IGNORED           CAUGHT STAT TTY        TIME COMMAND
+ 1000    2955 0000000000000000 0000000000000000 0000000000001000 0000000100004000 Ssl+ tty2       0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    2964 0000000000000000 0000000000000000 0000000000001000 0000000100004003 Sl+  tty2       0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    8860 0000000000000000 0000000000000000 0000000000384004 000000004b813efb Ss+  pts/0      0:01 /usr/bin/bash --init-file /snap/code/187/usr/share/code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+ 1000   14744 0000000000000000 0000000000000000 0000000000000000 0000000000000000 S    pts/0      0:05 ./a.out
+ 1000   16567 0000000000000000 0000000000010000 0000000000384004 000000004b813efb Ss   pts/1      0:00 bash
+ 1000   16627 0000000000000000 0000000000010000 0000000000000006 0000000000000000 S+   pts/1      0:00 ./a.out
+ 1000   16628 0000000000000000 0000000000000000 0000000000000000 0000000000000000 S+   pts/1      0:00 son1
+ 1000   16629 0000000000000000 0000000000000000 0000000000000200 0000000000000000 S+   pts/1      0:00 son2
+ 1000   16630 0000000000000000 0000000000000000 0000000000000000 0000000000000200 S+   pts/1      0:00 son3
+ 1000   16632 0000000000000000 0000000000000000 0000000000000000 0000000000010002 S+   pts/1      0:00 sh -c -- ps -s > prob3/start.txt
+ 1000   16633 0000000000000000 0000000000000000 0000000000000000 000000007391fef9 R+   pts/1      0:00 ps -s
+
+After signal:
+  UID     PID          PENDING          BLOCKED          IGNORED           CAUGHT STAT TTY        TIME COMMAND
+ 1000    2955 0000000000000000 0000000000000000 0000000000001000 0000000100004000 Ssl+ tty2       0:00 /usr/libexec/gdm-wayland-session env GNOME_SHELL_SESSION_MODE=ubuntu /usr/bin/gnome-session --session=ubuntu
+ 1000    2964 0000000000000000 0000000000000000 0000000000001000 0000000100004003 Sl+  tty2       0:00 /usr/libexec/gnome-session-binary --session=ubuntu
+ 1000    8860 0000000000000000 0000000000000000 0000000000384004 000000004b813efb Ss+  pts/0      0:01 /usr/bin/bash --init-file /snap/code/187/usr/share/code/resources/app/out/vs/workbench/contrib/terminal/common/scripts/shellIntegration-bash.sh
+ 1000   14744 0000000000000000 0000000000000000 0000000000000000 0000000000000000 S    pts/0      0:05 ./a.out
+ 1000   16567 0000000000000000 0000000000010000 0000000000384004 000000004b813efb Ss   pts/1      0:00 bash
+ 1000   16627 0000000000000000 0000000000010000 0000000000000006 0000000000000000 S+   pts/1      0:00 ./a.out
+ 1000   16628 0000000000000200 0000000000000000 0000000000000000 0000000000000000 Z+   pts/1      0:00 [son_1] <defunct>
+ 1000   16629 0000000000000000 0000000000000000 0000000000000200 0000000000000000 S+   pts/1      0:00 son2
+ 1000   16630 0000000000000000 0000000000000000 0000000000000000 0000000000000200 S+   pts/1      0:00 son3
+ 1000   16638 0000000000000000 0000000000000000 0000000000000000 0000000000010002 S+   pts/1      0:00 sh -c -- ps -s > prob3/stop.txt
+ 1000   16639 0000000000000000 0000000000000000 0000000000000000 000000007391fef9 R+   pts/1      0:00 ps -s
+Вс 04 мая 2025 01:32:34 MSK
+
+# son1:
+# До отправки: примет сигнал по умолчанию, так так
+# IGNORED=0000000000000000 (ничего не игнорирует)
+# CAUGHT=0000000000000000 (нет обработчиков)
+# Состояние S+ - работает
+# После отправки: по умолчанию процесс завершится
+# PENDING=0000000000000200 (SIGUSR1 был получен перед завершением)
+# Состояние Z+ - зомби
+
+# son2:
+# Остается в состоянии S+ - работает
+# Так как IGNORED=0000000000000200 (игнорирует SIGUSR1)
+
+# son3:
+# Остается в состоянии S+ - работает
+# Вывел строку, получается обработал SIGUSR1 в своём обработчике
+# Поэтому CAUGHT=0000000000000200
+
+# 3.2. wait(&status)
+
+nastnest@bubunta:~$ gcc prob3_2.c && ./a.out
+Child1 (PID: 17248) started
+Child2 (PID: 17249) started
+Child3 (PID: 17250) started
+Child2 (PID: 17249) exited with code 20
+Child3 (PID: 17250) exited by signal 30
+Child1 (PID: 17248) exited by signal 10
+Вс 04 мая 2025 02:10:38 MSK
+
+# waitpid(): позволяет выборочно ожидать конкретных потомков
+# и таким образом создавать очередь
+
+
+# ЗАДАНИЕ 4. Многонитевое функционирование
+
+# 4.1,2. Формирование нескольких нитей (потоков)
+
+nastnest@bubunta:~$ gcc prob4_1.c && ./a.out
+Поток pthread 1: PID=19201, TID=19202
+Поток pthread 2: PID=19201, TID=19203
+Поток clone 3: PID=19201, TID=19204
+Поток clone 4: PID=19201, TID=19205
+
+Потоки процесса текущие:
+    PID     TID CMD                         PSR %CPU
+  19201   19201 ./a.out                       0  0.0
+  19201   19202 ./a.out                       0  0.0
+  19201   19203 ./a.out                       0  0.0
+  19201   19204 ./a.out                       0  0.0
+  19201   19205 ./a.out                       0  0.0
+
+Поток pthread 1 завершается
+Поток pthread 2 завершается
+Поток clone 3 завершается
+Поток clone 4 завершается
+Основной поток завершен
+
+Потоки процесса после:
+    PID     TID CMD                         PSR %CPU
+  19201   19201 ./a.out                       0  0.0
+Вс 04 мая 2025 03:45:57 MSK
+
+# Все потоки имеют одинаковый PID, но разные TID
+# pthread высокоуровневый и удобен в использовании, стандарт, если нужна обычная многопоточность
+# clone низкоуровневый с ручным управлением, но большей гибкостью, скорее более специфичный
+
+# 4.3. Ресурсы, разделяемые нитями
+
+nastnest@bubunta:~$ gcc prob4_3.c && ./a.out
+Поток pthread 1: PID=19351, TID=19352, shared_counter=0
+Поток pthread 2: PID=19351, TID=19353, shared_counter=1
+Поток clone 3: PID=19351, TID=19354, shared_counter=2
+Поток clone 4: PID=19351, TID=19355, shared_counter=3
+Основной поток завершен, shared_counter=4
+
+res.txt:
+Поток pthread 1 завершается, shared_counter=1
+Поток pthread 2 завершается, shared_counter=2
+Поток clone 3 завершается, shared_counter=3
+Поток clone 4 завершается, shared_counter=
+Вс 04 мая 2025 04:01:17 MSK
+
+# Потоки наследуют от процесса: виртуальную память, открытые файловые дескрипторы, текущий рабочий каталог
+# Все потоки имеют доступ к одной и той же переменной (shared_counter)
+# При инкременте переменной в одном потоке, изменение видно всем другим потокам
+# Если не использовать например мьютексы, может попасть в состояние гонки
+
+# 4.4. Удаление нити
+
+nastnest@bubunta:~$ gcc prob4_4.c && ./a.out
+Поток pthread 1: PID=19673, TID=19674
+Главный поток (PID: 19673)
+Поток pthread 2: PID=19673, TID=19675
+2 working
+1 working
+1 working
+2 working
+2 working
+1 working
+2 working
+1 working
+2 working
+1 working
+2 working
+1 working
+2 working
+1 working
+2 working
+1 working
+nastnest@bubunta:~$ kill 19675
+Завершено
+Вс 04 мая 2025 04:12:45 MSK
+
+# Если удалить нить, завершатся все, процесс прекратится
+
+
+# ЗАДАНИЕ 5. Планирование
+
+# Для этого задания будет использоваться одноядерная машина, обновленные параметры в labsys.log
+
+# 5.1. Политика планирования и приоритет по умолчанию
+
+nastnest@bubunta:~$ sleep 5 & sleep 10 & ps -eo pid,comm,policy,pri,ni,comm,cmd | grep sleep
+[1] 3925
+[2] 3926
+   3925 sleep           TS   19   0 sleep           sleep 5
+   3926 sleep           TS   19   0 sleep           sleep 10
+   3928 grep            TS   19   0 grep            grep --color=auto sleep
+Вс 04 мая 2025 04:55:28 MSK
+
+# По умолчанию процессы и потоки, запущенные из shell, используют политику TS с приоритетом 19 и nice 0
+
+nastnest@bubunta:~$ gcc prob5_1.c && ./a.out
+ohyeahyeahohyeahohyeahohyeahohyeahohyeahohyeahohyeahohyeahohyeah
+Вс 04 мая 2025 05:11:58 MSK
+
+# Потоки имеют одинаковый приоритет и выполняются псевдопараллельно на одном процессоре (вывод чередуется)
+
+# 5.2. nice и setpriority
+
+nastnest@bubunta:~$ nice -n 0 sleep 3600 &
+[1] 4379
+nastnest@bubunta:~$ ps -o nice -p 4379
+ NI
+  0
+nastnest@bubunta:~$ renice -n 10 -p 4379
+4379 (process ID) старый приоритет 0, новый приоритет 10
+nastnest@bubunta:~$ ps -o nice -p 4379
+ NI
+ 10
+nastnest@bubunta:~$ renice -n 0 -p 4379
+renice: не удалось задать приоритет для 4379 (process ID): Отказано в доступе
+nastnest@bubunta:~$ sudo renice -n 0 -p 4379
+[sudo] пароль для nastnest: 
+4379 (process ID) старый приоритет 10, новый приоритет 0
+nastnest@bubunta:~$ ps -o nice -p 4379
+ NI
+  0
+nastnest@bubunta:~$ sudo renice -n -20 -p 4379
+4379 (process ID) старый приоритет 0, новый приоритет -20
+nastnest@bubunta:~$ ps -o nice -p 4379
+ NI
+-20
+Вс 04 мая 2025 05:33:27 MSK
+
+# Можно понизить приоритет, но без прав суперпользователя приоритет не повысить
+
+nastnest@bubunta:~$ gcc prob5_2.c
+nastnest@bubunta:~$ sudo nice -n -10 ./a.out &
+[1] 4827
+nastnest@bubunta:~$ nice -n 10 ./a.out &
+[2] 4830
+nastnest@bubunta:~$ ps -eo pid,comm,policy,pri,ni,comm,cmd | grep ./a.out
+   4827 sudo            TS   19   0 sudo            sudo nice -n -10 ./a.out
+   4828 sudo            TS   19   0 sudo            sudo nice -n -10 ./a.out
+   4829 a.out           TS   29 -10 a.out           ./a.out
+   4830 a.out           TS    9  10 a.out           ./a.out
+   4835 grep            TS   19   0 grep            grep --color=auto ./a.out
+
+nastnest@bubunta:~$ top
+
+top - 05:45:26 up  1:16,  1 user,  load average: 1,03, 1,70, 1,13
+Задачи: 200 total,   3 running, 197 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 29,6 us, 54,1 sy,  0,0 ni,  0,0 id,  0,0 wa,  0,0 hi, 16,3 si,  0,0 st 
+МиБ Mem :   2972,7 total,    230,5 free,   1531,0 used,   1431,2 buff/cache     
+МиБ Swap:   2972,0 total,   2972,0 free,      0,0 used.   1441,8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ 
+   4829 root      10 -10    2548   1048   1048 R  96,1   0,0   0:11.52 
+   4830 nastnest  30  10    2548   1044   1044 R   1,6   0,0   0:00.12 
+
+# Процесс с большим приоритетом ожидаемо получил значительно больше CPU
+
+# getpriority / setpriority — системные вызовы для управления приоритетом в программах
+
+# 5.3. Процедура планирования на FIFO
+
+nastnest@bubunta:~$ gcc prob5_3.c && sudo ./a.out
+5.3.1: одинаковые приоритеты
+Все приоритеты по 50
+CCCCCCCCCCAAAAAAAAAABBBBBBBBBB
+
+5.3.2: Определяем границы приоритетов для FIFO
+SCHED_FIFO priority range: 1 (min) - 99 (max)
+
+5.3.3: разные приоритеты
+Приоритеты: 30 - A(1), 70 - B(2), 50 - C(main)
+BBBBBBBBBBCCCCCCCCCCAAAAAAAAAA
+Вс 04 мая 2025 11:27:19 MSK
+
+# Тоже ожидаемый результат, чем больше приоритет, тем быстрее выполняется процесс
+# Приоритет - число от 1 до 99
+
+# 5.4. Процедура планирования на RR
+
+nastnest@bubunta:~$ gcc prob5_4.c && sudo ./a.out
+5.4.1: одинаковые приоритеты
+Все приоритеты по 50, sched_yield = 0
+CCCCCCCCCCAAAAAAAAAABBBBBBBBBB
+Все приоритеты по 50, sched_yield = 1
+CAAAAAAAAAABBBBBBBBBBCCCCCCCCC
+
+5.4.2: Определяем границы приоритетов для RR
+SCHED_RR priority range: 1 (min) - 99 (max)
+
+5.4.3: разные приоритеты
+Приоритеты: 30 - A(1), 70 - B(2), 50 - C(main)
+BBBBBBBBBBCCCCCCCCCCAAAAAAAAAA
+Те же приоритеты, sched_yield = 1
+BBBBBBBBBBCCCCCCCCCCAAAAAAAAAA
+Вс 04 мая 2025 11:48:40 MSK
+
+# sched_yield() позволяет потоку добровольно уступить процессор 
+# другим потокам того же приоритета, готовым к выполнению
+# Более высокий приоритет все равно выполнится первым
+
+# 5.5. Разные процедуры планирования с одинаковыми приоритетами
+
+nastnest@bubunta:~$ gcc prob5_5.c && sudo ./a.out
+FRFRFRFRFRFRFRFRFRFR
+Step 0: process FIFO
+Step 0: process RR
+Step 1: process FIFO
+Step 1: process RR
+Step 2: process FIFO
+Step 2: process RR
+Step 3: process FIFO
+Step 3: process RR
+Step 4: process FIFO
+Step 4: process RR
+Вс 04 мая 2025 12:37:07 MSK
+
+# Оба потока работают параллельно, выводя F (FIFO) и R (RR)
+# Имеют одинаковый приоритет (50), но SCHED_FIFO чуть приоритетнее, чем SCHED_RR, т.к. был вызван первым
+
+# 5.6. Потоки одного процесса
+
+nastnest@bubunta:~$ gcc prob5_6.c && sudo ./a.out
+Политика по умолчанию, приоритеты тоже
+Step 0: process 1 - OTHER, 0
+Step 1: process 1 - OTHER, 0
+Step 2: process 1 - OTHER, 0
+
+Один RR, два OTHER
+Step 0: process 1 - OTHER, 0
+Step 0: process 2 - RR, 1
+Step 0: process 3 - OTHER, 0
+Step 1: process 2 - RR, 1
+Step 1: process 1 - OTHER, 0
+Step 1: process 3 - OTHER, 0
+Step 2: process 2 - RR, 1
+Step 2: process 1 - OTHER, 0
+Step 2: process 3 - OTHER, 0
+
+Один RR, два FIFO
+Step 0: process 1 - FIFO, 1
+Step 0: process 2 - FIFO, 1
+Step 0: process 3 - RR, 1
+Step 1: process 1 - FIFO, 1
+Step 1: process 2 - FIFO, 1
+Step 1: process 3 - RR, 1
+Step 2: process 1 - FIFO, 1
+Step 2: process 2 - FIFO, 1
+Step 2: process 3 - RR, 1
+
+Разные приоритеты, разная политика
+Step 0: process 2 - FIFO, 25
+Step 0: process 3 - RR, 50
+Step 0: process 1 - OTHER, 0
+Step 1: process 3 - RR, 50
+Step 1: process 2 - FIFO, 25
+Step 1: process 1 - OTHER, 0
+Step 2: process 3 - RR, 50
+Step 2: process 2 - FIFO, 25
+Step 2: process 1 - OTHER, 0
+
+Два одинаковых приоритета, разная политика
+Step 0: process 1 - OTHER, 0
+Step 0: process 2 - FIFO, 25
+Step 0: process 3 - RR, 1
+Step 1: process 2 - FIFO, 25
+Step 1: process 3 - RR, 1
+Step 1: process 1 - OTHER, 0
+Step 2: process 2 - FIFO, 25
+Step 2: process 3 - RR, 1
+Step 2: process 1 - OTHER, 0
+
+Смена OTHER на RR и наоборот, приоритеты одинаковы
+Step 0: process 1 - RR, 1
+Step 0: process 2 - FIFO, 25
+Step 0: process 3 - OTHER, 0
+Step 1: process 2 - FIFO, 25
+Step 1: process 1 - RR, 1
+Step 1: process 3 - OTHER, 0
+Step 2: process 2 - FIFO, 25
+Step 2: process 1 - RR, 1
+Step 2: process 3 - OTHER, 0
+Вс 04 мая 2025 12:53:51 MSK
+
+# По умолчанию политика OTHER, приоритет 0
+# Потоки с политикой OTHER всегда имеют приоритет 0
+# Это видно из последних двух тестов, где была попытка установить приоритет 1
+# RR и FIFO - от 1 до 99
+# Последовательность зависит от приоритетов, как и ожидалось
+
+
+# ЗАДАНИЕ 6. Наследование
+
+# 6.1. Файл
+
+nastnest@bubunta:~$ gcc prob6_1.c && ./a.out
+Перед execl:
+Parent before child
+Child before exec
+Чтение после execl:
+Parent before child
+Child before exec
+Вс 04 мая 2025 13:44:51 MSK
+
+# Файл прочитан
+
+# 6.2. Приоритеты и политика
+
+nastnest@bubunta:~$ gcc prob6_2.c && sudo ./a.out
+Parent PID: 8111
+Parent priority: 20
+Parent scheduling policy: SCHED_RR
+Child PID: 8112
+Child priority: 20
+Child scheduling policy: SCHED_RR
+a.out	    prob2_1_1.c       prob3		prob4	   prob5_3.c  prob6_2.c
+father	    prob2_1_2.c       prob3_1_father.c	prob4_1.c  prob5_4.c  son
+lab2.log    prob2_2_father.c  prob3_1_son_1.c	prob4_3.c  prob5_5.c  son_1
+labsys.log  prob2_2_son.c     prob3_1_son_2.c	prob4_4.c  prob5_6.c  son_2
+nohup.out   prob2_3.c	      prob3_1_son_3.c	prob5_1.c  prob6      son_3
+prob2	    prob2_4.c	      prob3_2.c		prob5_2.c  prob6_1.c
+Вс 04 мая 2025 14:00:14 MSK
+
+# Приоритеты и политика наследуются
+
+# 6.3. Диспозиция и сигналы
+
+nastnest@bubunta:~$ gcc prob6_3.c && sudo ./a.out
+Parent with pid = 8287
+Child with pid = 8288
+  UID     PID   PENDING   BLOCKED   IGNORED    CAUGHT STAT TTY        TIME COMMAND
+    0    8284  00000000  00000000  00301000  080b6a07 S+   pts/1      0:00 sudo 
+    0    8286  00000000  00000000  00301000  00096a07 Ss   pts/2      0:00 sudo 
+    0    8287  00000000  00000000  00000000  00000200 S+   pts/2      0:00 ./a.o
+    0    8288  00000000  00010000  00000006  00000200 S+   pts/2      0:00 ./a.o
+    0    8289  00000000  00000000  00000000  00010002 S+   pts/2      0:00 sh -c
+    0    8290  00000000  00000000  00000000  7391fef9 R+   pts/2      0:00 ps -s
+Signal 10 received in 8288
+Вс 04 мая 2025 14:08:55 MSK
+
+# Сигнал передаётся и обрабатывается
+
+# 6.4. Функция clone
+
+nastnest@bubunta:~$ gcc prob6_4.c && sudo ./a.out
+Child PID=8560, nice=5, scheduling policy=0
+PID 8560 received SIGUSR1 signal
+Чтение из файла: Child wrote
+Вс 04 мая 2025 14:25:37 MSK
+
+# Наследование nice-значения и политики планирования
+# дочерний процесс унаследовал nice=5 и SCHED_OTHER=0 от родителя
+
+# Наследование в clone() происходит с флагами:
+
+# CLONE_FILES (общий файловый дескриптор) работает
+# дочерний процесс успешно записал в файл, открытый родителем
+
+# CLONE_SIGHAND (получение сигнала) работает
+# дочерний процесс унаследовал обработчик сигнала SIGUSR1 и успешно его обработал
+
+# CLONE_VM (работа с памятью) работает 
+# дочерний процесс имеет доступ к тем же адресным пространствам, что и родитель
+
+# SIGCHLD работает 
+# родительский процесс корректно дождался завершения дочернего
+
+# Все указанные флаги clone() работают как ожидалось

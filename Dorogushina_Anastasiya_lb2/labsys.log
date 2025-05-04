@@ -1,0 +1,712 @@
+# Дорогушина Анастасия Александровна, гр.3385
+# Лабораторная работа №2: Управление процессами и потоками
+# Сведения о профиле системы (сначала 2 ядра, потом 1)
+
+# Описание до 5 задания
+
+nastnest@bubunta:~$ lscpu
+Архитектура:                          x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Порядок байт:                         Little Endian
+CPU(s):                               2
+On-line CPU(s) list:                  0,1
+ID прроизводителя:                    AuthenticAMD
+Имя модели:                           AMD Ryzen 5 4500U with Radeon Graphics
+Семейство ЦПУ:                        23
+Модель:                               96
+Потоков на ядро:                      1
+Ядер на сокет:                        2
+Сокетов:                              1
+Степпинг:                             1
+BogoMIPS:                             4740,92
+Флаги:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+Разработчик гипервизора:              KVM
+Тип виртуализации:                    полный
+L1d cache:                            64 KiB (2 instances)
+L1i cache:                            64 KiB (2 instances)
+L2 cache:                             1 MiB (2 instances)
+L3 cache:                             16 MiB (2 instances)
+NUMA node(s):                         1
+NUMA node0 CPU(s):                    0,1
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Mitigation; untrained return thunk; SMT disabled
+Vulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:      Not affected
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+nastnest@bubunta:~$ uname -a
+Linux bubunta 6.11.0-21-generic #21~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 24 16:52:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+nastnest@bubunta:~$ sudo lshw
+bubunta
+    описание: Project-Id-Version: lshwReport-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>PO-Revision-Date: 2015-01-21 09:55+0000Last-Translator: Aleksey Kabanov <Unknown>Language-Team: Russian <ru@li.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-Encoding: 8bitX-Launchpad-Export-Date: 2025-01-30 17:14+0000X-Generator: Launchpad (build b13dacce4a364151a813e3cdd6940bbff676214a)Language: ru_RU
+    продукт: VirtualBox
+    производитель: innotek GmbH
+    версия: 1.2
+    серийный №: VirtualBox-cd861f95-8b9a-4eb4-b449-c7b372a9295e
+    разрядность: 64 bits
+    возможности: smbios-2.5 dmi-2.5 smp vsyscall32
+    конфигурация: family=Virtual Machine uuid=cd861f95-8b9a-4eb4-b449-c7b372a9295e
+  *-core
+       описание: Материнская плата
+       продукт: VirtualBox
+       производитель: Oracle Corporation
+       физический ID: 0
+       версия: 1.2
+       серийный №: 0
+     *-firmware
+          описание: BIOS
+          производитель: innotek GmbH
+          физический ID: 0
+          версия: VirtualBox
+          date: 12/01/2006
+          размер: 128KiB
+          capacity: 128KiB
+          возможности: isa pci cdboot bootselect int9keyboard int10video acpi
+     *-memory
+          описание: Системная память
+          физический ID: 1
+          размер: 3GiB
+     *-cpu
+          продукт: AMD Ryzen 5 4500U with Radeon Graphics
+          производитель: Advanced Micro Devices [AMD]
+          физический ID: 2
+          сведения о шине: cpu@0
+          версия: 23.96.1
+          разрядность: 64 bits
+          возможности: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp x86-64 constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+          конфигурация: microcode=4294967295
+     *-pci
+          описание: Host bridge
+          продукт: 440FX - 82441FX PMC [Natoma]
+          производитель: Intel Corporation
+          физический ID: 100
+          сведения о шине: pci@0000:00:00.0
+          версия: 02
+          разрядность: 32 bits
+          частота: 33MHz
+        *-isa
+             описание: ISA bridge
+             продукт: 82371SB PIIX3 ISA [Natoma/Triton II]
+             производитель: Intel Corporation
+             физический ID: 1
+             сведения о шине: pci@0000:00:01.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: isa bus_master
+             конфигурация: latency=0
+           *-pnp00:00
+                продукт: PnP device PNP0303
+                физический ID: 0
+                возможности: pnp
+                конфигурация: driver=i8042 kbd
+           *-pnp00:01
+                продукт: PnP device PNP0f03
+                физический ID: 1
+                возможности: pnp
+                конфигурация: driver=i8042 aux
+        *-ide
+             описание: IDE interface
+             продукт: 82371AB/EB/MB PIIX4 IDE
+             производитель: Intel Corporation
+             физический ID: 1.1
+             сведения о шине: pci@0000:00:01.1
+             логическое имя: scsi1
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ide isa_compat_mode pci_native_mode bus_master emulated
+             конфигурация: driver=ata_piix latency=64
+             ресурсы: IRQ:0 ioport:1f0(размер=8) ioport:3f6 ioport:170(размер=8) ioport:376 ioport:d000(размер=16)
+           *-cdrom
+                описание: DVD reader
+                продукт: CD-ROM
+                производитель: VBOX
+                физический ID: 0.0.0
+                сведения о шине: scsi@1:0.0.0
+                логическое имя: /dev/cdrom
+                логическое имя: /dev/sr0
+                логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                версия: 1.0
+                возможности: removable audio dvd
+                конфигурация: ansiversion=5 mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted status=ready
+              *-medium
+                   физический ID: 0
+                   логическое имя: /dev/cdrom
+                   логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                   конфигурация: mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted
+        *-display
+             описание: VGA compatible controller
+             продукт: SVGA II Adapter
+             производитель: VMware
+             физический ID: 2
+             сведения о шине: pci@0000:00:02.0
+             логическое имя: /dev/fb0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: vga_controller bus_master rom fb
+             конфигурация: depth=32 driver=vmwgfx latency=64 resolution=1280,800
+             ресурсы: IRQ:18 ioport:d010(размер=16) память:e0000000-e0ffffff память:f0000000-f01fffff память:c0000-dffff
+        *-network
+             описание: Ethernet interface
+             продукт: 82540EM Gigabit Ethernet Controller
+             производитель: Intel Corporation
+             физический ID: 3
+             сведения о шине: pci@0000:00:03.0
+             логическое имя: enp0s3
+             версия: 02
+             серийный №: 08:00:27:7e:5c:9b
+             размер: 1Gbit/s
+             capacity: 1Gbit/s
+             разрядность: 32 bits
+             частота: 66MHz
+             возможности: pm pcix bus_master cap_list ethernet physical tp 10bt 10bt-fd 100bt 100bt-fd 1000bt-fd autonegotiation
+             конфигурация: autonegotiation=on broadcast=yes driver=e1000 driverversion=6.11.0-21-generic duplex=full ip=10.0.2.15 latency=64 link=yes mingnt=255 multicast=yes port=twisted pair speed=1Gbit/s
+             ресурсы: IRQ:19 память:f0200000-f021ffff ioport:d020(размер=8)
+        *-generic
+             описание: System peripheral
+             продукт: VirtualBox mouse integration
+             производитель: InnoTek Systemberatung GmbH
+             физический ID: 4
+             сведения о шине: pci@0000:00:04.0
+             логическое имя: input7
+             логическое имя: /dev/input/event6
+             логическое имя: /dev/input/js1
+             логическое имя: /dev/input/mouse2
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: pci
+             конфигурация: driver=vboxguest latency=0
+             ресурсы: IRQ:20 ioport:d040(размер=32) память:f0400000-f07fffff память:f0800000-f0803fff
+        *-multimedia
+             описание: Multimedia audio controller
+             продукт: 82801AA AC'97 Audio Controller
+             производитель: Intel Corporation
+             физический ID: 5
+             сведения о шине: pci@0000:00:05.0
+             логическое имя: card0
+             логическое имя: /dev/snd/controlC0
+             логическое имя: /dev/snd/pcmC0D0c
+             логическое имя: /dev/snd/pcmC0D0p
+             логическое имя: /dev/snd/pcmC0D1c
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bus_master
+             конфигурация: driver=snd_intel8x0 latency=64
+             ресурсы: IRQ:21 ioport:d100(размер=256) ioport:d200(размер=64)
+        *-usb:0
+             описание: USB controller
+             продукт: KeyLargo/Intrepid USB
+             производитель: Apple Inc.
+             физический ID: 6
+             сведения о шине: pci@0000:00:06.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ohci bus_master cap_list
+             конфигурация: driver=ohci-pci latency=64
+             ресурсы: IRQ:22 память:f0804000-f0804fff
+           *-usbhost
+                продукт: OHCI PCI host controller
+                производитель: Linux 6.11.0-21-generic ohci_hcd
+                физический ID: 1
+                сведения о шине: usb@1
+                логическое имя: usb1
+                версия: 6.11
+                возможности: usb-1.10
+                конфигурация: driver=hub slots=12 speed=12Mbit/s
+              *-usb
+                   описание: HID
+                   продукт: VirtualBox USB Tablet
+                   производитель: VirtualBox
+                   физический ID: 1
+                   сведения о шине: usb@1:1
+                   логическое имя: input6
+                   логическое имя: /dev/input/event5
+                   логическое имя: /dev/input/js0
+                   логическое имя: /dev/input/mouse1
+                   версия: 1.00
+                   возможности: usb-1.10 usb
+                   конфигурация: driver=usbhid maxpower=100mA speed=12Mbit/s
+        *-bridge
+             описание: Bridge
+             продукт: 82371AB/EB/MB PIIX4 ACPI
+             производитель: Intel Corporation
+             физический ID: 7
+             сведения о шине: pci@0000:00:07.0
+             версия: 08
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bridge
+             конфигурация: driver=piix4_smbus latency=0
+             ресурсы: IRQ:9
+        *-usb:1
+             описание: USB controller
+             продукт: 82801FB/FBM/FR/FW/FRW (ICH6 Family) USB2 EHCI Controller
+             производитель: Intel Corporation
+             физический ID: b
+             сведения о шине: pci@0000:00:0b.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ehci bus_master cap_list
+             конфигурация: driver=ehci-pci latency=64
+             ресурсы: IRQ:19 память:f0805000-f0805fff
+           *-usbhost
+                продукт: EHCI Host Controller
+                производитель: Linux 6.11.0-21-generic ehci_hcd
+                физический ID: 1
+                сведения о шине: usb@2
+                логическое имя: usb2
+                версия: 6.11
+                возможности: usb-2.00
+                конфигурация: driver=hub slots=12 speed=480Mbit/s
+        *-sata
+             описание: SATA controller
+             продукт: 82801HM/HEM (ICH8M/ICH8M-E) SATA Controller [AHCI mode]
+             производитель: Intel Corporation
+             физический ID: d
+             сведения о шине: pci@0000:00:0d.0
+             логическое имя: scsi2
+             версия: 02
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: sata pm ahci_1.0 bus_master cap_list emulated
+             конфигурация: driver=ahci latency=64
+             ресурсы: IRQ:21 ioport:d240(размер=8) ioport:d248(размер=4) ioport:d250(размер=8) ioport:d258(размер=4) ioport:d260(размер=16) память:f0806000-f0807fff
+           *-disk
+                описание: ATA Disk
+                продукт: VBOX HARDDISK
+                производитель: VirtualBox
+                физический ID: 0.0.0
+                сведения о шине: scsi@2:0.0.0
+                логическое имя: /dev/sda
+                версия: 1.0
+                серийный №: VB4e1084c3-2c46367d
+                размер: 25GiB (26GB)
+                возможности: gpt-1.00 partitioned partitioned:gpt
+                конфигурация: ansiversion=5 guid=aecdcea2-165a-4abd-9e0f-a5ef32bff081 logicalsectorsize=512 sectorsize=512
+              *-volume:0
+                   описание: BIOS Boot partition
+                   производитель: EFI
+                   физический ID: 1
+                   сведения о шине: scsi@2:0.0.0,1
+                   логическое имя: /dev/sda1
+                   серийный №: 6d6cc99d-5eff-4fd6-a613-a26fc55053dc
+                   capacity: 1023KiB
+                   возможности: nofs
+              *-volume:1
+                   описание: Том EXT4
+                   производитель: Linux
+                   физический ID: 2
+                   сведения о шине: scsi@2:0.0.0,2
+                   логическое имя: /dev/sda2
+                   логическое имя: /
+                   версия: 1.0
+                   серийный №: 326b6bc2-2aac-4c5f-a847-4ef69582d42c
+                   размер: 24GiB
+                   возможности: journaled extended_attributes large_files huge_files dir_nlink recover 64bit extents ext4 ext2 initialized
+                   конфигурация: created=2025-03-16 21:52:53 filesystem=ext4 lastmountpoint=/ modified=2025-04-29 04:29:35 mount.fstype=ext4 mount.options=rw,relatime mounted=2025-04-27 16:44:01 state=mounted
+  *-input:0
+       продукт: Power Button
+       физический ID: 1
+       логическое имя: input0
+       логическое имя: /dev/input/event0
+       возможности: platform
+  *-input:1
+       продукт: Sleep Button
+       физический ID: 2
+       логическое имя: input1
+       логическое имя: /dev/input/event1
+       возможности: platform
+  *-input:2
+       продукт: AT Translated Set 2 keyboard
+       физический ID: 3
+       логическое имя: input2
+       логическое имя: /dev/input/event2
+       логическое имя: input2::capslock
+       логическое имя: input2::numlock
+       логическое имя: input2::scrolllock
+       возможности: i8042
+  *-input:3
+       продукт: ImExPS/2 Generic Explorer Mouse
+       физический ID: 4
+       логическое имя: input4
+       логическое имя: /dev/input/event3
+       логическое имя: /dev/input/mouse0
+       возможности: i8042
+  *-input:4
+       продукт: Video Bus
+       физический ID: 5
+       логическое имя: input5
+       логическое имя: /dev/input/event4
+       возможности: platform
+
+
+# При выполнении 5 задания
+
+nastnest@bubunta:~$ lscpu
+Архитектура:                          x86_64
+CPU op-mode(s):                       32-bit, 64-bit
+Address sizes:                        48 bits physical, 48 bits virtual
+Порядок байт:                         Little Endian
+CPU(s):                               1
+On-line CPU(s) list:                  0
+ID прроизводителя:                    AuthenticAMD
+Имя модели:                           AMD Ryzen 5 4500U with Radeon Graphics
+Семейство ЦПУ:                        23
+Модель:                               96
+Потоков на ядро:                      1
+Ядер на сокет:                        1
+Сокетов:                              1
+Степпинг:                             1
+BogoMIPS:                             4740,92
+Флаги:                                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp lm constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+Разработчик гипервизора:              KVM
+Тип виртуализации:                    полный
+L1d cache:                            32 KiB (1 instance)
+L1i cache:                            32 KiB (1 instance)
+L2 cache:                             512 KiB (1 instance)
+L3 cache:                             8 MiB (1 instance)
+NUMA node(s):                         1
+NUMA node0 CPU(s):                    0
+Vulnerability Gather data sampling:   Not affected
+Vulnerability Itlb multihit:          Not affected
+Vulnerability L1tf:                   Not affected
+Vulnerability Mds:                    Not affected
+Vulnerability Meltdown:               Not affected
+Vulnerability Mmio stale data:        Not affected
+Vulnerability Reg file data sampling: Not affected
+Vulnerability Retbleed:               Mitigation; untrained return thunk; SMT disabled
+Vulnerability Spec rstack overflow:   Vulnerable: Safe RET, no microcode
+Vulnerability Spec store bypass:      Not affected
+Vulnerability Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+Vulnerability Spectre v2:             Mitigation; Retpolines; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+Vulnerability Srbds:                  Not affected
+Vulnerability Tsx async abort:        Not affected
+
+nastnest@bubunta:~$ uname -a
+Linux bubunta 6.11.0-21-generic #21~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Mon Feb 24 16:52:15 UTC 2 x86_64 x86_64 x86_64 GNU/Linux
+
+nastnest@bubunta:~$ sudo lshw
+bubunta
+    описание: Project-Id-Version: lshwReport-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>PO-Revision-Date: 2015-01-21 09:55+0000Last-Translator: Aleksey Kabanov <Unknown>Language-Team: Russian <ru@li.org>MIME-Version: 1.0Content-Type: text/plain; charset=UTF-8Content-Transfer-Encoding: 8bitX-Launchpad-Export-Date: 2025-01-30 17:14+0000X-Generator: Launchpad (build b13dacce4a364151a813e3cdd6940bbff676214a)Language: ru_RU
+    продукт: VirtualBox
+    производитель: innotek GmbH
+    версия: 1.2
+    серийный №: VirtualBox-cd861f95-8b9a-4eb4-b449-c7b372a9295e
+    разрядность: 64 bits
+    возможности: smbios-2.5 dmi-2.5 vsyscall32
+    конфигурация: family=Virtual Machine uuid=cd861f95-8b9a-4eb4-b449-c7b372a9295e
+  *-core
+       описание: Материнская плата
+       продукт: VirtualBox
+       производитель: Oracle Corporation
+       физический ID: 0
+       версия: 1.2
+       серийный №: 0
+     *-firmware
+          описание: BIOS
+          производитель: innotek GmbH
+          физический ID: 0
+          версия: VirtualBox
+          date: 12/01/2006
+          размер: 128KiB
+          capacity: 128KiB
+          возможности: isa pci cdboot bootselect int9keyboard int10video acpi
+     *-memory
+          описание: Системная память
+          физический ID: 1
+          размер: 3GiB
+     *-cpu
+          продукт: AMD Ryzen 5 4500U with Radeon Graphics
+          производитель: Advanced Micro Devices [AMD]
+          физический ID: 2
+          сведения о шине: cpu@0
+          версия: 23.96.1
+          разрядность: 64 bits
+          возможности: fpu fpu_exception wp vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt rdtscp x86-64 constant_tsc rep_good nopl nonstop_tsc cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 cx16 sse4_1 sse4_2 movbe popcnt aes rdrand hypervisor lahf_lm cr8_legacy abm sse4a misalignsse 3dnowprefetch ssbd vmmcall fsgsbase bmi1 bmi2 rdseed adx clflushopt sha_ni arat
+          конфигурация: microcode=4294967295
+     *-pci
+          описание: Host bridge
+          продукт: 440FX - 82441FX PMC [Natoma]
+          производитель: Intel Corporation
+          физический ID: 100
+          сведения о шине: pci@0000:00:00.0
+          версия: 02
+          разрядность: 32 bits
+          частота: 33MHz
+        *-isa
+             описание: ISA bridge
+             продукт: 82371SB PIIX3 ISA [Natoma/Triton II]
+             производитель: Intel Corporation
+             физический ID: 1
+             сведения о шине: pci@0000:00:01.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: isa bus_master
+             конфигурация: latency=0
+           *-pnp00:00
+                продукт: PnP device PNP0303
+                физический ID: 0
+                возможности: pnp
+                конфигурация: driver=i8042 kbd
+           *-pnp00:01
+                продукт: PnP device PNP0f03
+                физический ID: 1
+                возможности: pnp
+                конфигурация: driver=i8042 aux
+        *-ide
+             описание: IDE interface
+             продукт: 82371AB/EB/MB PIIX4 IDE
+             производитель: Intel Corporation
+             физический ID: 1.1
+             сведения о шине: pci@0000:00:01.1
+             логическое имя: scsi1
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ide isa_compat_mode pci_native_mode bus_master emulated
+             конфигурация: driver=ata_piix latency=64
+             ресурсы: IRQ:0 ioport:1f0(размер=8) ioport:3f6 ioport:170(размер=8) ioport:376 ioport:d000(размер=16)
+           *-cdrom
+                описание: DVD reader
+                продукт: CD-ROM
+                производитель: VBOX
+                физический ID: 0.0.0
+                сведения о шине: scsi@1:0.0.0
+                логическое имя: /dev/cdrom
+                логическое имя: /dev/sr0
+                логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                версия: 1.0
+                возможности: removable audio dvd
+                конфигурация: ansiversion=5 mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted status=ready
+              *-medium
+                   физический ID: 0
+                   логическое имя: /dev/cdrom
+                   логическое имя: /media/nastnest/VBox_GAs_7.1.6
+                   конфигурация: mount.fstype=iso9660 mount.options=ro,nosuid,nodev,relatime,nojoliet,check=s,map=n,blocksize=2048,uid=1000,gid=1000,dmode=500,fmode=400,iocharset=utf8 state=mounted
+        *-display
+             описание: VGA compatible controller
+             продукт: SVGA II Adapter
+             производитель: VMware
+             физический ID: 2
+             сведения о шине: pci@0000:00:02.0
+             логическое имя: /dev/fb0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: vga_controller bus_master rom fb
+             конфигурация: depth=32 driver=vmwgfx latency=64 resolution=1280,800
+             ресурсы: IRQ:18 ioport:d010(размер=16) память:e0000000-e0ffffff память:f0000000-f01fffff память:c0000-dffff
+        *-network
+             описание: Ethernet interface
+             продукт: 82540EM Gigabit Ethernet Controller
+             производитель: Intel Corporation
+             физический ID: 3
+             сведения о шине: pci@0000:00:03.0
+             логическое имя: enp0s3
+             версия: 02
+             серийный №: 08:00:27:7e:5c:9b
+             размер: 1Gbit/s
+             capacity: 1Gbit/s
+             разрядность: 32 bits
+             частота: 66MHz
+             возможности: pm pcix bus_master cap_list ethernet physical tp 10bt 10bt-fd 100bt 100bt-fd 1000bt-fd autonegotiation
+             конфигурация: autonegotiation=on broadcast=yes driver=e1000 driverversion=6.11.0-21-generic duplex=full ip=10.0.2.15 latency=64 link=yes mingnt=255 multicast=yes port=twisted pair speed=1Gbit/s
+             ресурсы: IRQ:19 память:f0200000-f021ffff ioport:d020(размер=8)
+        *-generic
+             описание: System peripheral
+             продукт: VirtualBox mouse integration
+             производитель: InnoTek Systemberatung GmbH
+             физический ID: 4
+             сведения о шине: pci@0000:00:04.0
+             логическое имя: input7
+             логическое имя: /dev/input/event6
+             логическое имя: /dev/input/js1
+             логическое имя: /dev/input/mouse2
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: pci
+             конфигурация: driver=vboxguest latency=0
+             ресурсы: IRQ:20 ioport:d040(размер=32) память:f0400000-f07fffff память:f0800000-f0803fff
+        *-multimedia
+             описание: Multimedia audio controller
+             продукт: 82801AA AC'97 Audio Controller
+             производитель: Intel Corporation
+             физический ID: 5
+             сведения о шине: pci@0000:00:05.0
+             логическое имя: card0
+             логическое имя: /dev/snd/controlC0
+             логическое имя: /dev/snd/pcmC0D0c
+             логическое имя: /dev/snd/pcmC0D0p
+             логическое имя: /dev/snd/pcmC0D1c
+             версия: 01
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bus_master
+             конфигурация: driver=snd_intel8x0 latency=64
+             ресурсы: IRQ:21 ioport:d100(размер=256) ioport:d200(размер=64)
+        *-usb:0
+             описание: USB controller
+             продукт: KeyLargo/Intrepid USB
+             производитель: Apple Inc.
+             физический ID: 6
+             сведения о шине: pci@0000:00:06.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ohci bus_master cap_list
+             конфигурация: driver=ohci-pci latency=64
+             ресурсы: IRQ:22 память:f0804000-f0804fff
+           *-usbhost
+                продукт: OHCI PCI host controller
+                производитель: Linux 6.11.0-21-generic ohci_hcd
+                физический ID: 1
+                сведения о шине: usb@1
+                логическое имя: usb1
+                версия: 6.11
+                возможности: usb-1.10
+                конфигурация: driver=hub slots=12 speed=12Mbit/s
+              *-usb
+                   описание: HID
+                   продукт: VirtualBox USB Tablet
+                   производитель: VirtualBox
+                   физический ID: 1
+                   сведения о шине: usb@1:1
+                   логическое имя: input4
+                   логическое имя: /dev/input/event3
+                   логическое имя: /dev/input/js0
+                   логическое имя: /dev/input/mouse0
+                   версия: 1.00
+                   возможности: usb-1.10 usb
+                   конфигурация: driver=usbhid maxpower=100mA speed=12Mbit/s
+        *-bridge
+             описание: Bridge
+             продукт: 82371AB/EB/MB PIIX4 ACPI
+             производитель: Intel Corporation
+             физический ID: 7
+             сведения о шине: pci@0000:00:07.0
+             версия: 08
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: bridge
+             конфигурация: driver=piix4_smbus latency=0
+             ресурсы: IRQ:9
+        *-usb:1
+             описание: USB controller
+             продукт: 82801FB/FBM/FR/FW/FRW (ICH6 Family) USB2 EHCI Controller
+             производитель: Intel Corporation
+             физический ID: b
+             сведения о шине: pci@0000:00:0b.0
+             версия: 00
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: ehci bus_master cap_list
+             конфигурация: driver=ehci-pci latency=64
+             ресурсы: IRQ:19 память:f0805000-f0805fff
+           *-usbhost
+                продукт: EHCI Host Controller
+                производитель: Linux 6.11.0-21-generic ehci_hcd
+                физический ID: 1
+                сведения о шине: usb@2
+                логическое имя: usb2
+                версия: 6.11
+                возможности: usb-2.00
+                конфигурация: driver=hub slots=12 speed=480Mbit/s
+        *-sata
+             описание: SATA controller
+             продукт: 82801HM/HEM (ICH8M/ICH8M-E) SATA Controller [AHCI mode]
+             производитель: Intel Corporation
+             физический ID: d
+             сведения о шине: pci@0000:00:0d.0
+             логическое имя: scsi2
+             версия: 02
+             разрядность: 32 bits
+             частота: 33MHz
+             возможности: sata pm ahci_1.0 bus_master cap_list emulated
+             конфигурация: driver=ahci latency=64
+             ресурсы: IRQ:21 ioport:d240(размер=8) ioport:d248(размер=4) ioport:d250(размер=8) ioport:d258(размер=4) ioport:d260(размер=16) память:f0806000-f0807fff
+           *-disk
+                описание: ATA Disk
+                продукт: VBOX HARDDISK
+                производитель: VirtualBox
+                физический ID: 0.0.0
+                сведения о шине: scsi@2:0.0.0
+                логическое имя: /dev/sda
+                версия: 1.0
+                серийный №: VB4e1084c3-2c46367d
+                размер: 25GiB (26GB)
+                возможности: gpt-1.00 partitioned partitioned:gpt
+                конфигурация: ansiversion=5 guid=aecdcea2-165a-4abd-9e0f-a5ef32bff081 logicalsectorsize=512 sectorsize=512
+              *-volume:0
+                   описание: BIOS Boot partition
+                   производитель: EFI
+                   физический ID: 1
+                   сведения о шине: scsi@2:0.0.0,1
+                   логическое имя: /dev/sda1
+                   серийный №: 6d6cc99d-5eff-4fd6-a613-a26fc55053dc
+                   capacity: 1023KiB
+                   возможности: nofs
+              *-volume:1
+                   описание: Том EXT4
+                   производитель: Linux
+                   физический ID: 2
+                   сведения о шине: scsi@2:0.0.0,2
+                   логическое имя: /dev/sda2
+                   логическое имя: /
+                   версия: 1.0
+                   серийный №: 326b6bc2-2aac-4c5f-a847-4ef69582d42c
+                   размер: 24GiB
+                   возможности: journaled extended_attributes large_files huge_files dir_nlink recover 64bit extents ext4 ext2 initialized
+                   конфигурация: created=2025-03-16 21:52:53 filesystem=ext4 lastmountpoint=/ modified=2025-05-04 04:29:03 mount.fstype=ext4 mount.options=rw,relatime mounted=2025-05-04 04:29:05 state=mounted
+  *-input:0
+       продукт: Power Button
+       физический ID: 1
+       логическое имя: input0
+       логическое имя: /dev/input/event0
+       возможности: platform
+  *-input:1
+       продукт: Sleep Button
+       физический ID: 2
+       логическое имя: input1
+       логическое имя: /dev/input/event1
+       возможности: platform
+  *-input:2
+       продукт: AT Translated Set 2 keyboard
+       физический ID: 3
+       логическое имя: input2
+       логическое имя: /dev/input/event2
+       логическое имя: input2::capslock
+       логическое имя: input2::numlock
+       логическое имя: input2::scrolllock
+       возможности: i8042
+  *-input:3
+       продукт: ImExPS/2 Generic Explorer Mouse
+       физический ID: 4
+       логическое имя: input5
+       логическое имя: /dev/input/event4
+       логическое имя: /dev/input/mouse1
+       возможности: i8042
+  *-input:4
+       продукт: Video Bus
+       физический ID: 5
+       логическое имя: input6
+       логическое имя: /dev/input/event5
+       возможности: platform
